@@ -113,11 +113,12 @@ public class GameMainManager : MonoBehaviour
     // callback of upload button
     public void ChickLoad()
     {
-        #if UNITY_EDITOR
-            EditorLoad();
-        #elif UNITY_WEBGL
-            WebUpload();
-        #endif
+        /* #if UNITY_EDITOR
+             EditorLoad();
+         #elif UNITY_WEBGL
+             WebUpload();
+         #endif*/
+        WebUpload();
     }
 
     void EditorLoad()
@@ -144,46 +145,25 @@ public class GameMainManager : MonoBehaviour
             // open maidata.txt
             Action successCallback = () =>
             {
-                menuManager.uploadText = "Upload Audio";
                 status = 1;
             };
-            Action<string> uploadedCallback = (path) =>
-            {
-                StartCoroutine(loader.initFromWeb(path, successCallback));
-            };
-            WebFileUploaderHelper.RequestFile(uploadedCallback, ".txt");
-        }
-        else if (status == 1)
-        {
-            // open track.mp3
             Action audioCallback = () =>
             {
-                menuManager.uploadText = "Upload BG";
                 status = 2;
             };
-            Action<string> callback = (path) => 
-            {
-                StartCoroutine(SE.LoadWebAudio(path, audioCallback));
-            };
-            WebFileUploaderHelper.Dispose();
-            WebFileUploaderHelper.RequestFile(callback, ".mp3");
-        }
-        else if (status == 2)
-        {
-            // open bg.jpg
             Action bgCallback = () =>
             {
                 menuManager.SetReadyMode();
                 UpdateLevel();
                 status = 3;
             };
-            Action<string> callback = (path) =>
-            { 
-                StartCoroutine(bgManager.LoadBGFromWeb(path, bgCallback));
-            };
-            WebFileUploaderHelper.Dispose();
-            WebFileUploaderHelper.RequestFile(callback, ".jpg");
+            StartCoroutine(loader.initFromWeb("https://www.maimaimfc.ink/_functions/chart/1/1", successCallback));
+            StartCoroutine(SE.LoadWebAudio("https://www.maimaimfc.ink/_functions/chart/1/2", audioCallback));
+            StartCoroutine(bgManager.LoadBGFromWeb("https://www.maimaimfc.ink/_functions/chart/1/3", bgCallback));
+
+            //WebFileUploaderHelper.RequestFile(uploadedCallback, ".txt");
         }
+        
         else if (status == 3)
         // reset
         {SceneManager.LoadScene(0, LoadSceneMode.Single);}
