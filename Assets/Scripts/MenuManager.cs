@@ -51,12 +51,12 @@ public class MenuManager : MonoBehaviour
 
     public void SetInitMode()
     {
-        Upload.interactable = true;
+        Upload.interactable = false;
         PlayPause.interactable = false;
         Stop.interactable = false;
         levelSelector.interactable = false;
         recordMode.interactable = false;
-        Upload.gameObject.GetComponentsInChildren<Image>()[1].sprite = ic_upload;
+        Upload.gameObject.GetComponentsInChildren<Image>()[1].sprite = ic_reset;
         PlayPause.gameObject.GetComponentInChildren<TMP_Text>().text = "Play";
         PlayPause.gameObject.GetComponentsInChildren<Image>()[1].sprite = ic_play;
         pageToggle.interactable = true;
@@ -94,8 +94,8 @@ public class MenuManager : MonoBehaviour
         recordMode.interactable = true;
         PlayPause.gameObject.GetComponentInChildren<TMP_Text>().text = "Play";
         PlayPause.gameObject.GetComponentsInChildren<Image>()[1].sprite = ic_play;
-        Upload.gameObject.GetComponentInChildren<TMP_Text>().text = "Reset";
-        Upload.gameObject.GetComponentsInChildren<Image>()[1].sprite = ic_reset;
+        Upload.gameObject.GetComponentInChildren<TMP_Text>().text = "Back";
+        Upload.gameObject.GetComponentsInChildren<Image>()[1].sprite = ic_upload;
         pageToggle.interactable = true;
     }
 

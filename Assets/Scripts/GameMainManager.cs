@@ -44,6 +44,23 @@ public class GameMainManager : MonoBehaviour
     private bool inited = false;
     private int status = 0;
 
+    string id;
+    string chartpath;
+    string bgpath;
+    string audiopath;
+
+
+    void Start()
+    {
+        id = PlayerPrefs.GetString("id");
+        //string MMFCpath = "https://www.maimaimfc.ink/_functions/contestList";
+        chartpath = "https://www.maimaimfc.ink/_functions/contestEntry/" + id + "/1";
+        audiopath = "https://www.maimaimfc.ink/_functions/contestEntry/" + id + "/2";
+        bgpath = "https://www.maimaimfc.ink/_functions/contestEntry/" + id + "/3";
+        //StartCoroutine(getMMFCList(MMFCpath));
+        WebUpload();
+
+    }
     // init loading & start playing method
     public void ChickStart()
     {
@@ -118,7 +135,10 @@ public class GameMainManager : MonoBehaviour
          #elif UNITY_WEBGL
              WebUpload();
          #endif*/
-        WebUpload();
+
+        SceneManager.LoadScene("SongLstMenu");
+
+
     }
 
     void EditorLoad()
@@ -146,27 +166,76 @@ public class GameMainManager : MonoBehaviour
             Action successCallback = () =>
             {
                 status = 1;
+                WebUpload();
+
             };
+
+            StartCoroutine(loader.initFromWeb(chartpath, successCallback));
+        }
+        else if(status == 1)
+        {
             Action audioCallback = () =>
             {
                 status = 2;
+                WebUpload();
             };
+   
+            StartCoroutine(SE.LoadWebAudio(audiopath, audioCallback));
+        }
+        else if (status == 2)
+        {
             Action bgCallback = () =>
             {
                 menuManager.SetReadyMode();
                 UpdateLevel();
                 status = 3;
-            };
-            StartCoroutine(loader.initFromWeb("https://www.maimaimfc.ink/_functions/chart/1/1", successCallback));
-            StartCoroutine(SE.LoadWebAudio("https://www.maimaimfc.ink/_functions/chart/1/2", audioCallback));
-            StartCoroutine(bgManager.LoadBGFromWeb("https://www.maimaimfc.ink/_functions/chart/1/3", bgCallback));
 
-            //WebFileUploaderHelper.RequestFile(uploadedCallback, ".txt");
+            };
+
+            StartCoroutine(bgManager.LoadBGFromWeb(bgpath, bgCallback));
         }
+        
+            
+            
+            //WebFileUploaderHelper.RequestFile(uploadedCallback, ".txt");
+        
         
         else if (status == 3)
         // reset
-        {SceneManager.LoadScene(0, LoadSceneMode.Single);}
+
+        {  Debug.Log(status); SceneManager.LoadScene("SongLstMenu");}
+
+    }
+    [Serializable]
+    public class SongList
+    {
+        public List<SongInfo> info;
+    }
+    [Serializable]
+    public class SongInfo
+    {
+        public string Title;
+        public string sequenceID;
+    }
+
+    public IEnumerator getMMFCList(string path)
+    {
+        if (path == string.Empty) { Debug.LogError("Empty path!"); yield break; }
+        Debug.Log("Downloading song list from " + path);
+        UnityWebRequest www = UnityWebRequest.Get(path);
+        yield return www.SendWebRequest();
+
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError("Error downloading data: " + www.error);
+        }
+        else
+        {
+            string songs = "{\"info\":" + www.downloadHandler.text + "}";
+            Debug.Log(songs);
+            SongList songlist = JsonUtility.FromJson<SongList>(songs);
+            Debug.Log(songlist.info[0].Title);
+        }
     }
 
     // method that checks if level is empty
