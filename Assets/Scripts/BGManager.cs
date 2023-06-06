@@ -93,28 +93,18 @@ public class BGManager : MonoBehaviour
     }
     public IEnumerator LoadBGFromWeb(string path, Action callback)
     {
-        Texture2D texture;
         if (path == string.Empty) {Debug.LogError("empty bg path!"); yield break;}
-        Debug.Log("Downloading bg from " + path);
-        UnityWebRequest previous = UnityWebRequest.Get(path);
-        yield return previous.SendWebRequest();
-        if (previous.result != UnityWebRequest.Result.Success)
+        UnityWebRequest bgreq = UnityWebRequest.Get(path);
+        bgreq.downloadHandler = new DownloadHandlerTexture();
+        yield return bgreq.SendWebRequest();
+        if (bgreq.result != UnityWebRequest.Result.Success)
         {
-            Debug.LogError("Error downloading bg: " + previous.error);
+            Debug.LogError("Error downloading bg: " + bgreq.error);
         }
         else
         {
-            string truePath = JsonUtility.FromJson<audioUrl>(previous.downloadHandler.text).downloadUrl;
-            using (UnityWebRequest imageWeb = new UnityWebRequest(truePath, UnityWebRequest.kHttpVerbGET))
-            {
-                imageWeb.downloadHandler = new DownloadHandlerTexture();
-
-                yield return imageWeb.SendWebRequest();
-
-                texture = ((DownloadHandlerTexture)imageWeb.downloadHandler).texture;
-            }
-            Sprite sprite;
-            sprite = Sprite.Create(
+            var texture = DownloadHandlerTexture.GetContent(bgreq);
+            var sprite = Sprite.Create(
                 texture,
                 new Rect(0.0f, 0.0f, texture.width, texture.height),
                 new Vector2(0.5f, 0.5f));

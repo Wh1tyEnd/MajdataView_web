@@ -78,38 +78,28 @@ public class SoundEffect: MonoBehaviour
         public string downloadUrl;
     }
     // Download audio and assign to bgm after uploaded
-        public IEnumerator LoadWebAudio(string path, Action callback = null)
+    public IEnumerator LoadWebAudio(string path, Action callback = null)
     {
         if (path == string.Empty) {Debug.LogError("Empty path!"); yield break;}
         Debug.Log("Downloading audio from " + path);
-        UnityWebRequest previous = UnityWebRequest.Get(path);
-        yield return previous.SendWebRequest();
-        
-        if (previous.result != UnityWebRequest.Result.Success)
+        UnityWebRequest trackreq = UnityWebRequest.Get(path);
+        trackreq.downloadHandler = new DownloadHandlerAudioClip(path,AudioType.MPEG);
+        yield return trackreq.SendWebRequest();
+
+        if (trackreq.result != UnityWebRequest.Result.Success)
         {
-            Debug.LogError("Error downloading audio: " + previous.error);
+            Debug.LogError("Error downloading audio: " + trackreq.error);
         }
         else
         {
-            string truePath = JsonUtility.FromJson<audioUrl>(previous.downloadHandler.text).downloadUrl;
-            UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(truePath, AudioType.MPEG);
-            yield return www.SendWebRequest();
-            Debug.Log(truePath);
-            if (www.result != UnityWebRequest.Result.Success)
+            var clip = DownloadHandlerAudioClip.GetContent(trackreq);
+            if (clip != null)
             {
-                Debug.LogError("Error downloading audio: " + www.error);
+                bgmStream.clip = clip;
+                if (callback != null)
+                    callback.Invoke();
             }
-            else
-            {
-                var clip = DownloadHandlerAudioClip.GetContent(www);
-                if (clip != null)
-                {
-                    bgmStream.clip = clip;
-                    if (callback != null)
-                        callback.Invoke();
-                }
-                else { Debug.LogError("AudioClip is null!"); }
-            }
+            else { Debug.LogError("AudioClip is null!"); }
         }
         
     }

@@ -9,6 +9,7 @@ using System.IO;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using API;
 
 public class GameMainManager : MonoBehaviour
 {
@@ -53,11 +54,9 @@ public class GameMainManager : MonoBehaviour
     void Start()
     {
         id = PlayerPrefs.GetString("id");
-        //string MMFCpath = "https://www.maimaimfc.ink/_functions/contestList";
-        chartpath = "https://www.maimaimfc.ink/_functions/contestEntry/" + id + "/1";
-        audiopath = "https://www.maimaimfc.ink/_functions/contestEntry/" + id + "/2";
-        bgpath = "https://www.maimaimfc.ink/_functions/contestEntry/" + id + "/3";
-        //StartCoroutine(getMMFCList(MMFCpath));
+        chartpath = ApiAccess.ROOT+"Maidata/" + id;
+        audiopath = ApiAccess.ROOT + "Track/" + id;
+        bgpath = ApiAccess.ROOT + "Image/" + id;
         WebUpload();
 
     }
