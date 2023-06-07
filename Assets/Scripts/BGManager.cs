@@ -11,13 +11,13 @@ using UnityEngine.UI;
 public class BGManager : MonoBehaviour
 {
     SpriteRenderer spriteRender;
-    AudioTimeProvider provider;
-    float playSpeed;
+    SpriteRenderer BackgroundCover;
+    public SettingsManager settings;
 
     void Start()
     {
         spriteRender = GetComponent<SpriteRenderer>();
-        provider = GameObject.Find("AudioTimeProvider").GetComponent<AudioTimeProvider>();
+        BackgroundCover = GameObject.Find("BackgroundCover").GetComponent<SpriteRenderer>();
     }
     public class audioUrl
     {
@@ -47,5 +47,10 @@ public class BGManager : MonoBehaviour
             callback.Invoke();
         }
             
+    }
+
+    public void Update()
+    {
+        BackgroundCover.color = new UnityEngine.Color(0f, 0f, 0f, settings.bgCover);
     }
 }

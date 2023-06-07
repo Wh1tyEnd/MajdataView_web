@@ -339,11 +339,11 @@ public class SoundEffect: MonoBehaviour
         }
         return latestNoteFinishTime;
     }
-    public void SoundEffectUpdate()
+    public void SoundEffectUpdate(float audioOffset)
     {
         try
         {
-            var currentTime = timeProvider.AudioTime;
+            var currentTime = timeProvider.AudioTime + audioOffset;
             // var waitToBePlayed = SimaiProcess.notelist.FindAll(o => o.havePlayed == false && o.time > currentTime);
             if (waitToBePlayed.Count < 1) return;
             var nearestTime = waitToBePlayed[0].time;

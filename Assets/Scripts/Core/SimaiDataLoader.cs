@@ -64,7 +64,6 @@ public class SimaiDataLoader : MonoBehaviour
     // MajdataView/JsonDataLoader.cs 的 LoadJson(string json, float ignoreOffset) 方法的改版
     public void PlayLevel(float ignoreOffset)
     {
-
         CountNoteSum();
         
         if(SimaiProcess.notelist.Count <= 0) {return;}

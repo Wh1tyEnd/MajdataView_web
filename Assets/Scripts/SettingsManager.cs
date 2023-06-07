@@ -73,7 +73,7 @@ public class SettingsManager : MonoBehaviour
     }}
 
     public float noteSpeed {get {
-        return GetSlider("NoteSpeed").value / 10;
+        return (float)(107.25 / (71.4184491 * Mathf.Pow(GetSlider("NoteSpeed").value / 10 + 0.9975f, -0.985558604f)));
     }}
 
     public float touchSpeed {get {

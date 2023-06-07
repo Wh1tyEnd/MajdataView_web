@@ -67,15 +67,13 @@ public class GameMainManager : MonoBehaviour
     public void Play()
     {
         startAt = System.DateTime.Now.Ticks;
-        loader.noteSpeed = (float)(107.25 / (71.4184491 * Mathf.Pow(settings.noteSpeed + 0.9975f, -0.985558604f)));
+        loader.noteSpeed = settings.noteSpeed;
         loader.touchSpeed = settings.touchSpeed;
-        timeProvider.audioOffset = settings.offset;
         SimaiProcess.Serialize(SimaiProcess.fumens[menuManager.level]);
         timeProvider.SetStartTime(startTime - offset, audioSpeed);
         objectCounter.ComboSetActive(settings.combo);
         loader.PlayLevel(startTime);
         multTouchHandler.clearSlots();
-        bgCover.color = new Color(0f, 0f, 0f, settings.bgCover);
         Notes.GetComponent<PlayAllPerfect>().enabled = false;
         inited = true;
         // set btn states
