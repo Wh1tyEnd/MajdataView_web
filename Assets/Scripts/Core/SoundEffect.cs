@@ -84,8 +84,11 @@ public class SoundEffect: MonoBehaviour
         Debug.Log("Downloading audio from " + path);
         UnityWebRequest trackreq = UnityWebRequest.Get(path);
         trackreq.downloadHandler = new DownloadHandlerAudioClip(path,AudioType.MPEG);
-        yield return trackreq.SendWebRequest();
-
+        trackreq.SendWebRequest();
+        while (!trackreq.isDone) {
+            //Debug.Log(trackreq.downloadProgress);
+            yield return new WaitForSecondsRealtime(0.2f);
+        }
         if (trackreq.result != UnityWebRequest.Result.Success)
         {
             Debug.LogError("Error downloading audio: " + trackreq.error);

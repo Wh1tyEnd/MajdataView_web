@@ -1680,7 +1680,6 @@ MonoBehaviour:
   menuManager: {fileID: 476448316}
   settings: {fileID: 818028865}
   bgm: {fileID: 1627284972}
-  difficulty: 0
   startTime: 0
   startAt: 0
   audioSpeed: 1
@@ -7852,7 +7851,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 54, y: -28.243}
+  m_AnchoredPosition: {x: 54, y: -6.5}
   m_SizeDelta: {x: 66, y: 51.513}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!1 &1102174995

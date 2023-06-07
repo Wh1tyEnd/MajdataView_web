@@ -179,16 +179,6 @@ MonoBehaviour:
   loading: {fileID: 742994882}
   loadingtext: {fileID: 509962066}
   idPointer: 0
-  showList:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!1 &43397382
 GameObject:
   m_ObjectHideFlags: 0

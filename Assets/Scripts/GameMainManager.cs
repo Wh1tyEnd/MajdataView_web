@@ -121,7 +121,10 @@ public class GameMainManager : MonoBehaviour
         void checkReady()
         {
             menuManager.SetLoadingText(status);
-            if(status ==3 ) { menuManager.SetReadyMode(); }
+            if(status ==3 ) {
+                menuManager.SetReadyMode();
+                OnDropDownClick();
+            }
         }
         // open maidata.txt
         Action successCallback = () =>

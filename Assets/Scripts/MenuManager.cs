@@ -69,7 +69,7 @@ public class MenuManager : MonoBehaviour
     }
 
 
-    public int level {get { return levelSelector.value; } }
+    public int level { get { return levelSelector.value; } }
 
     public void ShowWindow(string fumen)
     {
