@@ -9,6 +9,8 @@ using DG.Tweening;
 using Newtonsoft.Json;
 using JsonFormat;
 using API;
+using System.Linq;
+using TMPro;
 
 public class SongSelect : MonoBehaviour
 {
@@ -18,24 +20,24 @@ public class SongSelect : MonoBehaviour
     public GameObject loading;
     public GameObject loadingtext;
 
-    public Dictionary<string, Texture2D> textureCache= new Dictionary<string, Texture2D>();
+    
     public int idPointer = 0;
     
     const string SongListApiPath = ApiAccess.ROOT + "SongList";
     const string BGApiPath = ApiAccess.ROOT + "Image/{0}";
 
     int listlen = 9;
-    public GameObject[] showList = new GameObject[9];
+    GameObject[] showList;
     int centerNum = 4;
     float coverDist = 3.3f;
     RawImage rawImage;
-    List<SongDetail> songlist = new List<SongDetail>();
+    
     // Start is called before the first frame update
     void Start()
     {
-        
+        showList = new GameObject[listlen];
         Debug.Log(showList.Length);
-        StartCoroutine(getMMFCList(SongListApiPath));
+        init();
         
         //initShowList();
     }
@@ -51,81 +53,43 @@ public class SongSelect : MonoBehaviour
         {
             moveLeft();
         }
-    }
-    public IEnumerator getMMFCList(string path)
-    {
         
-        if (path == string.Empty) { Debug.LogError("Empty path!"); yield break; }
-        Debug.Log("Downloading song list from " + path);
-        UnityWebRequest www = UnityWebRequest.Get(path);
-        yield return www.SendWebRequest();
-
-        if (www.result != UnityWebRequest.Result.Success)
-        {
-            Debug.LogError("Error downloading data: " + www.error);
-        }
-        else
-        {
-            songlist = JsonConvert.DeserializeObject<List<SongDetail>>(www.downloadHandler.text);
-            Debug.Log($"Downloaded the songlist with {songlist.Count} songs");
-        }
-        initShowList();
     }
-
-    public IEnumerator LoadBGFromWeb(string id, RawImage rawImage)
+    
+    public void init()
     {
-        string path = String.Format(BGApiPath, id);
-        if (path == string.Empty) { Debug.LogError("empty bg path!"); yield break; }
-        Debug.Log("Downloading bg from " + path);
-        UnityWebRequest bgreq = UnityWebRequest.Get(path);
-        bgreq.downloadHandler = new DownloadHandlerTexture();
-        yield return bgreq.SendWebRequest();
-        if (bgreq.result != UnityWebRequest.Result.Success)
+        Action initAction = () =>
         {
-            Debug.LogError("Error downloading bg: " + bgreq.error);
-        }
-        else
-        {
-            var texture = DownloadHandlerTexture.GetContent(bgreq);
-            Sprite sprite;
-            sprite = Sprite.Create(
-                texture,
-                new Rect(0.0f, 0.0f, texture.width, texture.height),
-                new Vector2(0.5f, 0.5f));
-
-            rawImage.texture = texture;
-            var scale = 1080f / (float)sprite.texture.width;
-            gameObject.transform.localScale = new Vector3(scale, scale, scale);
-            textureCache.Add(id, texture);
-        }
-
+            if (WebLoader.songlist.Count <= 0)
+            {
+                loadingtext.GetComponent<TMP_Text>().text = "Warning:Empty";
+                loadingtext.GetComponent<TMP_Text>().color = new Color(255,0,0);
+            }
+            else
+            {
+                initShowList();
+            }
+            
+        };
+        StartCoroutine(WebLoader.getMMFCList(SongListApiPath, initAction));
     }
 
-    public IEnumerator LoadBGFromCache(string id, RawImage rawImage)
-    {
-        Texture2D texture = textureCache[id];
-        Sprite sprite;
-        sprite = Sprite.Create(
-            texture,
-            new Rect(0.0f, 0.0f, texture.width, texture.height),
-            new Vector2(0.5f, 0.5f));
 
-        rawImage.texture = texture;
-        //spriteRender.sprite = sprite;
-        var scale = 1080f / (float)sprite.texture.width;
-        gameObject.transform.localScale = new Vector3(scale, scale, scale);
-        yield return null;
-    }
+    
 
     public void initShowList()
     {
-
+        idPointer = WebLoader.playID;
+        if(WebLoader.songlist.Count < centerNum)
+        {
+            extentList();
+        }
         for (int i = 0; i < listlen; i++)
         {
             Debug.Log(i + "     " + showList.Length);
             GameObject temp = Instantiate(coverSheet, new Vector2(0 + (i - centerNum) * coverDist, 0), Quaternion.identity);
             temp.transform.parent = parentConvas.transform;
-
+            Debug.Log(transportID(i - centerNum));
             setInfo(temp, transportID(i - centerNum));
             showList[i] = temp;
             if (i != centerNum)
@@ -138,7 +102,7 @@ public class SongSelect : MonoBehaviour
             }
 
         }
-        PlayerPrefs.SetString("id", songlist[transportID(0)].Id.ToString());
+        
         buttons.SetActive(true);
         loading.SetActive(false);
         loadingtext.SetActive(false);
@@ -146,7 +110,7 @@ public class SongSelect : MonoBehaviour
 
     public void playChart()
     {
-        Debug.Log("play");
+        WebLoader.playID = transportID(0);
         SceneManager.LoadScene("main");
     }
 
@@ -175,7 +139,7 @@ public class SongSelect : MonoBehaviour
         setInfo(temp, transportID(centerNum));
         showList[listlen-1] = temp;
         Destroy(wastedCover);
-        PlayerPrefs.SetString("id", songlist[transportID(0)].Id.ToString());
+        
     }
 
     public void moveLeft()
@@ -207,30 +171,41 @@ public class SongSelect : MonoBehaviour
         setInfo(temp, transportID(-centerNum));
         showList[0] = temp;
         Destroy(wastedCover);
-        PlayerPrefs.SetString("id", songlist[transportID(0)].Id.ToString());
+        
     }
+
+    
 
     public int transportID(int i)
     {
-        if (songlist.Count != 0)
+        if (WebLoader.songlist.Count != 0)
         {
-            return (idPointer + i + songlist.Count) % songlist.Count;
+            return (idPointer + i + WebLoader.songlist.Count) % WebLoader.songlist.Count;
         }
         else return 0;
     }
 
+    public void extentList()
+    {
+        WebLoader.songlist = WebLoader.songlist.Concat(WebLoader.songlist).ToList();
+        if(WebLoader.songlist.Count < centerNum)
+        {
+            extentList();
+        }
+    }
+
     public void setInfo(GameObject obj, int id)
     {
-        obj.transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<Text>().text = songlist[id].Id.ToString();
-        obj.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<Text>().text = songlist[id].Title;
+        obj.transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<Text>().text = WebLoader.songlist[id].Id.ToString();
+        obj.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<Text>().text = WebLoader.songlist[id].Title;
         Debug.Log(obj.transform.GetChild(0).GetChild(0).name);
-        if (textureCache.ContainsKey(songlist[id].Id.ToString()))
+        if (WebLoader.textureCache.ContainsKey(WebLoader.songlist[id].Id.ToString()))
         {
-            StartCoroutine(LoadBGFromCache(songlist[id].Id.ToString(), obj.transform.GetChild(0).GetChild(0).GetComponent<RawImage>()));
+            StartCoroutine(WebLoader.LoadBGFromCache(WebLoader.songlist[id].Id.ToString(), obj.transform.GetChild(0).GetChild(0).GetComponent<RawImage>()));
         }
         else
         {
-            StartCoroutine(LoadBGFromWeb(songlist[id].Id.ToString(), obj.transform.GetChild(0).GetChild(0).GetComponent<RawImage>()));
+            StartCoroutine(WebLoader.LoadBGFromWeb(WebLoader.songlist[id].Id.ToString(), obj.transform.GetChild(0).GetChild(0).GetComponent<RawImage>()));
         }
         
     }

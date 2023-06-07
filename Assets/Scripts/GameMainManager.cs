@@ -53,11 +53,22 @@ public class GameMainManager : MonoBehaviour
 
     void Start()
     {
-        id = PlayerPrefs.GetString("id");
+        if (WebLoader.songlist.Count <= 0)
+        {
+            menuManager.Upload.interactable = true;
+            menuManager.Upload.gameObject.GetComponentInChildren<TMP_Text>().text = "Empty! Pleace go Back";
+            menuManager.Upload.gameObject.GetComponentInChildren<TMP_Text>().color = Color.red;
+        }
+        else
+        {
+            id = WebLoader.getChartID();
+        
         chartpath = ApiAccess.ROOT+"Maidata/" + id;
         audiopath = ApiAccess.ROOT + "Track/" + id;
         bgpath = ApiAccess.ROOT + "Image/" + id;
         WebUpload();
+        }
+            
 
     }
     // init loading & start playing method
