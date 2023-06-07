@@ -71,7 +71,7 @@ public class SongSelect : MonoBehaviour
             }
             
         };
-        StartCoroutine(WebLoader.getMMFCList(SongListApiPath, initAction));
+        StartCoroutine(WebLoader.getSongList(SongListApiPath, initAction));
     }
 
 

@@ -26,14 +26,6 @@ public class SimaiDataLoader : MonoBehaviour
     public RuntimeAnimatorController BreakShine;
     public RuntimeAnimatorController HoldShine;
 
-    public TMP_Text diffText;
-    public TMP_Text levelText;
-    public Text titleText;
-    public Text artistText;
-    public Text designText;
-    public RawImage cardImage;
-    public Color[] diffColors = new Color[7];
-
     ObjectCounter ObjectCounter;
     CustomSkin customSkin;
 
@@ -43,29 +35,6 @@ public class SimaiDataLoader : MonoBehaviour
     {
         ObjectCounter = GameObject.Find("ObjectCounter").GetComponent<ObjectCounter>();
         customSkin = GameObject.Find("Skin").GetComponent<CustomSkin>();
-    }
-
-    // MajdataEdit/MainWindowCore.cs 的 initFromFile(string path) 方法的改版
-    public void initFromFile(string path)
-    {
-        var audioPath = path + "/track.mp3";
-        var dataPath = path + "/maidata.txt";
-        if (!File.Exists(audioPath))
-        {
-            Debug.LogError("No Track.mp3 Error!");
-            return;
-        }
-        if (!File.Exists(dataPath))
-        {
-            Debug.LogError("No Maidata.txt Error!");
-            return;
-        }
-        SimaiProcess.ClearData();
-
-        if (!SimaiProcess.ReadData(dataPath))
-        {
-            return;
-        }
     }
 
     // request and load maidata
@@ -93,16 +62,8 @@ public class SimaiDataLoader : MonoBehaviour
     }
 
     // MajdataView/JsonDataLoader.cs 的 LoadJson(string json, float ignoreOffset) 方法的改版
-    public void PlayLevel(int difficulty, float ignoreOffset)
+    public void PlayLevel(float ignoreOffset)
     {
-        SimaiProcess.Serialize(SimaiProcess.fumens[difficulty]);
-        
-        diffText.text = SimaiProcess.GetDifficultyText(difficulty);
-        levelText.text = SimaiProcess.levels[difficulty];
-        titleText.text = SimaiProcess.title;
-        artistText.text = SimaiProcess.artist;
-        designText.text = SimaiProcess.designer;
-        cardImage.color = diffColors[difficulty];
 
         CountNoteSum();
         

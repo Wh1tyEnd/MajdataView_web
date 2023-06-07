@@ -24,7 +24,7 @@ namespace API
         public static Dictionary<string, Texture2D> textureCache = new Dictionary<string, Texture2D>();
 
 
-        public static IEnumerator getMMFCList(string path, Action initShowList)
+        public static IEnumerator getSongList(string path, Action initShowList)
         {
 
             if (path == string.Empty) { Debug.LogError("Empty path!"); yield break; }

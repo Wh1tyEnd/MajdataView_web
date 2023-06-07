@@ -104,27 +104,6 @@ public class SoundEffect: MonoBehaviour
         
     }
 
-    /*public IEnumerator LoadWebAudio(string path, Action callback = null)
-    {
-        if (path == string.Empty) {Debug.LogError("Empty path!"); yield break;}
-        Debug.Log("Downloading audio from " + path);
-        UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(path, AudioType.MPEG);
-        yield return www.SendWebRequest();
- 
-        if (www.result != UnityWebRequest.Result.Success) {
-            Debug.LogError("Error downloading audio: " + www.error);
-        }
-        else
-        {
-            var clip = DownloadHandlerAudioClip.GetContent(www);
-            if(clip != null) {
-                bgmStream.clip = clip;
-                if (callback != null)
-                    callback.Invoke();
-            } else {Debug.LogError("AudioClip is null!");}
-        }
-    }*/
-
     public void generateSoundEffectList(double startTime, bool isOpIncluded)
     {
         songLength = bgmStream.clip.length;
