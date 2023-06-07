@@ -107,34 +107,10 @@ public class SoundEffect: MonoBehaviour
         
     }
 
-    public void generateSoundEffectList(double startTime, bool isOpIncluded)
+    public void generateSoundEffectList(double startTime)
     {
         songLength = bgmStream.clip.length;
         waitToBePlayed = new List<SoundEffectTiming>();
-        if (isOpIncluded)
-        {
-            waitToBePlayed.Add(new SoundEffectTiming(-5f, _hasTrackStart: true));
-            var cmds = SimaiProcess.other_commands.Split('\n');
-            foreach (var cmdl in cmds)
-            {
-                if (cmdl.Length > 12 && cmdl.Substring(1, 11) == "clock_count")
-                {
-                    try
-                    {
-                        int clock_cnt = int.Parse(cmdl.Substring(13));
-                        double clock_int = 60.0d / SimaiProcess.notelist[0].currentBpm;
-                        for (int i = 0; i < clock_cnt; i++)
-                        {
-                            waitToBePlayed.Add(new SoundEffectTiming(i * clock_int, _hasClock: true));
-                        }
-                    }
-                    catch
-                    {
-
-                    }
-                }
-            }
-        }
         foreach (var noteGroup in SimaiProcess.notelist)
         {
             if (noteGroup.time < startTime) { continue; }
@@ -314,10 +290,6 @@ public class SoundEffect: MonoBehaviour
             {
                 waitToBePlayed.Add(stobj);
             }
-        }
-        if (isOpIncluded)
-        {
-            waitToBePlayed.Add(new SoundEffectTiming(GetAllPerfectStartTime(), _hasAllPerfect: true));
         }
         waitToBePlayed.Sort((o1, o2) => o1.time < o2.time ? -1 : 1);
 

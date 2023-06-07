@@ -9,39 +9,22 @@ public class AudioTimeProvider : MonoBehaviour
 
     float startTime;
     float speed;
-    long ticks = 0;
     public bool isStart = false;
-    public bool isRecord = false;
-    public float offset = 0f;
+    public float playStartTime = 0f;
     public float audioOffset = 0f;
     public AudioSource bgm;
     public SoundEffect SE;
 
-    public void SetStartTime(long _ticks, float _offset, float _speed, bool _isRecord = false)
+    public void SetStartTime(float _playStartTime, float _speed)
     {
-        ticks = _ticks;
-        offset = _offset;
-        AudioTime = offset;
-        var dateTime = new DateTime(ticks);
-        var seconds = (dateTime - DateTime.Now).TotalSeconds;
-        isRecord = _isRecord;
+        playStartTime = _playStartTime;
+        AudioTime = playStartTime;
         speed = _speed;
-        Debug.Log("offset = " + offset);
-        SE.generateSoundEffectList(offset, isRecord);
-        if (_isRecord)
-        {
-            startTime = Time.time + 5f + audioOffset;
-        }
-        else
-        {
-            startTime = Time.time + audioOffset;
-        }
+        SE.generateSoundEffectList(playStartTime);
+        startTime = Time.time + audioOffset;
         isStart = true;
-        bgm.time = 0f;
-        if(isRecord)
-            bgm.PlayDelayed(5f);
-        else
-            bgm.Play();
+        bgm.time = AudioTime;
+        bgm.Play();
     }
 
     public void Pause()
@@ -53,7 +36,7 @@ public class AudioTimeProvider : MonoBehaviour
     public void Resume()
     {
         startTime = Time.time + audioOffset;
-        offset = AudioTime - audioOffset;
+        playStartTime = AudioTime - audioOffset;
         isStart = true;
         bgm.time = AudioTime - audioOffset;
         bgm.Play();
@@ -61,7 +44,7 @@ public class AudioTimeProvider : MonoBehaviour
 
     public void ResetStartTime()
     {
-        offset = 0f;
+        playStartTime = 0f;
         AudioTime = 0f;
         bgm.Stop();
         isStart = false;
@@ -71,22 +54,22 @@ public class AudioTimeProvider : MonoBehaviour
     {
         if (isStart)
         {
-            AudioTime = (Time.time - startTime) * speed + offset;
-            // AudioTime = bgm.time;
-            SE.SoundEffectUpdate();
-            if (AudioTime >= 0 && Mathf.Abs(AudioTime - audioOffset - bgm.time) > 0.05)
+            AudioTime = (Time.time - startTime) * speed + playStartTime;
+            var delta = AudioTime - audioOffset - bgm.time;
+            //print(delta);
+            if (AudioTime >= 0 && Mathf.Abs(delta) > 0.03)
             {
-                Debug.Log("bgm time delay > 0.05");
+                Debug.LogError("bgm time delay > 0.03");
                 if(AudioTime + audioOffset > bgm.clip.length) {
                     bgm.Stop();
-                    ResetStartTime();
+                    isStart = false;
                 }
-                // bgm.time = AudioTime;
                 if (AudioTime + audioOffset > bgm.time)
-                    startTime += Mathf.Abs(AudioTime - audioOffset - bgm.time);
+                    startTime += Mathf.Abs(delta)*0.7f;
                 else
-                    startTime -= Mathf.Abs(AudioTime - audioOffset - bgm.time);
+                    startTime -= Mathf.Abs(delta)*0.7f;
             }
+            SE.SoundEffectUpdate();
         }
     }
 }

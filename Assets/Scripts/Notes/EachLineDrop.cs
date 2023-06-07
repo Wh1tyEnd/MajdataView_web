@@ -28,13 +28,15 @@ public class EachLineDrop : MonoBehaviour
         var timing = timeProvider.AudioTime - time;
         var distance = timing * speed + 4.8f;
         var destScale = distance * 0.4f + 0.51f;
+        if (destScale > 0.3f) sr.forceRenderingOff = false;
+        else return;
         if (timing > 0) {
             Destroy(gameObject);
         }
         if (distance < 1.225f)
         {
             distance = 1.225f;
-            if (destScale > 0.3f) sr.forceRenderingOff = false;
+            
         }
         var lineScale = Mathf.Abs(distance / 4.8f);
         transform.localScale = new Vector3(lineScale, lineScale, 1f);

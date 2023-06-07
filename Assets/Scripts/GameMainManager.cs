@@ -71,7 +71,7 @@ public class GameMainManager : MonoBehaviour
         loader.touchSpeed = settings.touchSpeed;
         timeProvider.audioOffset = settings.offset;
         SimaiProcess.Serialize(SimaiProcess.fumens[menuManager.level]);
-        timeProvider.SetStartTime(startAt, startTime - offset, audioSpeed);
+        timeProvider.SetStartTime(startTime - offset, audioSpeed);
         objectCounter.ComboSetActive(settings.combo);
         loader.PlayLevel(startTime);
         multTouchHandler.clearSlots();
