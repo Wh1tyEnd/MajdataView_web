@@ -45,10 +45,9 @@ public class AudioTimeProvider : MonoBehaviour
 
     public void ResetStartTime()
     {
-        playStartTime = 0f;
-        AudioTime = 0f;
-        bgm.Stop();
         isStart = false;
+        AudioTime = playStartTime;
+        bgm.Stop();
     }
 
     void Update()

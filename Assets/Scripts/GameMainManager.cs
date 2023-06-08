@@ -83,8 +83,13 @@ public class GameMainManager : MonoBehaviour
     // callback of play/pause button
     public void OnPlayPauseButtonClick()
     {
-        if (!inited) {Play();return;}
+        if (!inited) {
+            //startTime = timeProvider.AudioTime;
+            Play();
+            return;
+        }
         if (timeProvider.isStart) {
+            startTime = timeProvider.AudioTime;
             timeProvider.Pause();
             menuManager.SetPauseMode();
         } else {
@@ -99,7 +104,6 @@ public class GameMainManager : MonoBehaviour
         // hide bgcover
         bgCover.color = new Color(0f, 0f, 0f, 0f);
         // reset audiotime
-        startTime = 0f;
         timeProvider.ResetStartTime();
         // destroy all notes
         foreach (Transform child in Notes.transform) {
