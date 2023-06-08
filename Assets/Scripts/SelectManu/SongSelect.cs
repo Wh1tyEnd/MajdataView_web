@@ -60,7 +60,7 @@ public class SongSelect : MonoBehaviour
     {
         Action initAction = () =>
         {
-            if (WebLoader.songlist.Count <= 0)
+            if (SongInformation.songlist.Count <= 0)
             {
                 loadingtext.GetComponent<TMP_Text>().text = "Warning:Empty";
                 loadingtext.GetComponent<TMP_Text>().color = new Color(255,0,0);
@@ -79,8 +79,8 @@ public class SongSelect : MonoBehaviour
 
     public void initShowList()
     {
-        idPointer = WebLoader.playID;
-        if(WebLoader.songlist.Count < centerNum)
+        idPointer = SongInformation.playID;
+        if(SongInformation.songlist.Count < centerNum)
         {
             extentList();
         }
@@ -110,7 +110,7 @@ public class SongSelect : MonoBehaviour
 
     public void playChart()
     {
-        WebLoader.playID = transportID(0);
+        SongInformation.playID = transportID(0);
         SceneManager.LoadScene("main");
     }
 
@@ -178,17 +178,17 @@ public class SongSelect : MonoBehaviour
 
     public int transportID(int i)
     {
-        if (WebLoader.songlist.Count != 0)
+        if (SongInformation.songlist.Count != 0)
         {
-            return (idPointer + i + WebLoader.songlist.Count) % WebLoader.songlist.Count;
+            return (idPointer + i + SongInformation.songlist.Count) % SongInformation.songlist.Count;
         }
         else return 0;
     }
 
     public void extentList()
     {
-        WebLoader.songlist = WebLoader.songlist.Concat(WebLoader.songlist).ToList();
-        if(WebLoader.songlist.Count < centerNum)
+        SongInformation.songlist = SongInformation.songlist.Concat(SongInformation.songlist).ToList();
+        if(SongInformation.songlist.Count < centerNum)
         {
             extentList();
         }
@@ -196,19 +196,16 @@ public class SongSelect : MonoBehaviour
 
     public void setInfo(GameObject obj, int id)
     {
-        obj.transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<Text>().text = WebLoader.songlist[id].Id.ToString();
-        obj.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<Text>().text = WebLoader.songlist[id].Title;
-        obj.transform.GetChild(0).GetChild(1).GetChild(2).GetComponent<Text>().text = WebLoader.songlist[id].Artist;
-        obj.transform.GetChild(0).GetChild(1).GetChild(3).GetComponent<Text>().text = WebLoader.songlist[id].Designer;
+        obj.transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<Text>().text = SongInformation.songlist[id].Id.ToString();
+        obj.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<Text>().text = SongInformation.songlist[id].Title;
+        obj.transform.GetChild(0).GetChild(1).GetChild(2).GetComponent<Text>().text = SongInformation.songlist[id].Artist;
+        obj.transform.GetChild(0).GetChild(1).GetChild(3).GetComponent<Text>().text = SongInformation.songlist[id].Designer;
         Debug.Log(obj.transform.GetChild(0).GetChild(0).name);
-        if (WebLoader.textureCache.ContainsKey(WebLoader.songlist[id].Id.ToString()))
-        {
-            StartCoroutine(WebLoader.LoadBGFromCache(WebLoader.songlist[id].Id.ToString(), obj.transform.GetChild(0).GetChild(0).GetComponent<RawImage>()));
-        }
-        else
-        {
-            StartCoroutine(WebLoader.LoadBGFromWeb(WebLoader.songlist[id].Id.ToString(), obj.transform.GetChild(0).GetChild(0).GetComponent<RawImage>()));
-        }
+
+        StartCoroutine(WebLoader.LoadBGFromWeb(SongInformation.songlist[id].Id.ToString(), obj.transform.GetChild(0).GetChild(0).GetComponent<RawImage>()));
+        
         
     }
+
+
 }
