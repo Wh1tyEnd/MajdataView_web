@@ -16,13 +16,9 @@ namespace API
     }
 
     class WebLoader : MonoBehaviour
-    {
-        
+    {        
         const string SongListApiPath = ApiAccess.ROOT + "SongList";
         const string BGApiPath = ApiAccess.ROOT + "Image/{0}";
-
-
-
         public static IEnumerator getSongList(string path, Action initShowList)
         {
 

@@ -341,8 +341,7 @@ public class SoundEffect: MonoBehaviour
     }
     public void SoundEffectUpdate(float audioOffset)
     {
-        try
-        {
+
             var currentTime = timeProvider.AudioTime + audioOffset;
             // var waitToBePlayed = SimaiProcess.notelist.FindAll(o => o.havePlayed == false && o.time > currentTime);
             if (waitToBePlayed.Count < 1) return;
@@ -408,7 +407,5 @@ public class SoundEffect: MonoBehaviour
                     clockStream.Play();
                 }
             }
-        }
-        catch { }
     }
 }

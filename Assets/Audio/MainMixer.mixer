@@ -226,7 +226,7 @@ AudioMixerController:
   m_StartSnapshot: {fileID: 24500006}
   m_SuspendThreshold: -80
   m_EnableSuspend: 1
-  m_UpdateMode: 0
+  m_UpdateMode: 1
   m_ExposedParameters:
   - guid: 74ccea594df561f4ea7eb4360ca5af9a
     name: Answer
@@ -313,17 +313,17 @@ AudioMixerSnapshotController:
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: 62fddc291458ee2438248e3f36642f7c
   m_FloatValues:
-    fcec111041453fd4884dea7e548bebf6: -9
-    89410d62b9ebed546a9ff5fac5c7ace8: -10
-    96815d1352bc7ae4391dc6b8802aa001: -13
+    fcec111041453fd4884dea7e548bebf6: -10
+    89410d62b9ebed546a9ff5fac5c7ace8: -15
+    96815d1352bc7ae4391dc6b8802aa001: -10
     d0f4ba88f2ae1e244a3ee760a8e11cf8: -3
-    74ccea594df561f4ea7eb4360ca5af9a: -7
-    9ec105caf13587d41b6dde1a68f6edc8: -7
+    74ccea594df561f4ea7eb4360ca5af9a: 6
+    9ec105caf13587d41b6dde1a68f6edc8: -10
     0c2d390bdf8db284f88acc331f514294: 0
-    3bcb472be2b53d647be7d5a4954d1a1d: -5
+    3bcb472be2b53d647be7d5a4954d1a1d: -20
     1a1d7c2ecafad30408a2f9c86bbc7735: -10
     b333953e7082bb24ba5f4de7257db430: -2.8722944
-    489d10eef5511374486e13a69961e474: -7
+    489d10eef5511374486e13a69961e474: -10
   m_TransitionOverrides: {}
 --- !u!244 &178619888176746173
 AudioMixerEffectController:

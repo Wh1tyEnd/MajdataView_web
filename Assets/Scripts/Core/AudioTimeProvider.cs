@@ -22,10 +22,10 @@ public class AudioTimeProvider : MonoBehaviour
         AudioTime = playStartTime;
         speed = _speed;
         SE.generateSoundEffectList(playStartTime);
-        startTime = Time.time;
-        isStart = true;
         bgm.time = AudioTime;
         bgm.Play();
+        startTime = Time.realtimeSinceStartup;
+        isStart = true;
     }
 
     public void Pause()
@@ -36,7 +36,7 @@ public class AudioTimeProvider : MonoBehaviour
 
     public void Resume()
     {
-        startTime = Time.time;
+        startTime = Time.realtimeSinceStartup;
         playStartTime = AudioTime;
         isStart = true;
         bgm.time = AudioTime;
@@ -55,7 +55,7 @@ public class AudioTimeProvider : MonoBehaviour
         if (isStart)
         {
             audioOffset = settings.offset;
-            AudioTime = (Time.time - startTime) * speed + playStartTime;
+            AudioTime = (Time.realtimeSinceStartup - startTime) * speed + playStartTime;
             var delta = AudioTime - bgm.time;
             //print(delta);
             if (AudioTime >= 0 && Mathf.Abs(delta) > 0.03)
@@ -70,6 +70,13 @@ public class AudioTimeProvider : MonoBehaviour
                 else
                     startTime -= Mathf.Abs(delta)*0.7f;
             }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+       if(isStart)
+        {
             SE.SoundEffectUpdate(audioOffset);
         }
     }

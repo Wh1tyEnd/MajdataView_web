@@ -70,9 +70,9 @@ public class GameMainManager : MonoBehaviour
         loader.noteSpeed = settings.noteSpeed;
         loader.touchSpeed = settings.touchSpeed;
         SimaiProcess.Serialize(SimaiProcess.fumens[menuManager.level]);
+        loader.PlayLevel(startTime);
         timeProvider.SetStartTime(startTime - offset, audioSpeed);
         objectCounter.ComboSetActive(settings.combo);
-        loader.PlayLevel(startTime);
         multTouchHandler.clearSlots();
         Notes.GetComponent<PlayAllPerfect>().enabled = false;
         inited = true;
