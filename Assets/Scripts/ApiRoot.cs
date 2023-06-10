@@ -17,11 +17,10 @@ namespace API
 
     class WebLoader : MonoBehaviour
     {
-        public static int playID = 0;
-        public static List<SongDetail> songlist = new List<SongDetail>();
+        
         const string SongListApiPath = ApiAccess.ROOT + "SongList";
         const string BGApiPath = ApiAccess.ROOT + "Image/{0}";
-        public static Dictionary<string, Texture2D> textureCache = new Dictionary<string, Texture2D>();
+
 
 
         public static IEnumerator getSongList(string path, Action initShowList)
@@ -38,8 +37,9 @@ namespace API
             }
             else
             {
-                songlist = JsonConvert.DeserializeObject<List<SongDetail>>(www.downloadHandler.text);
-                Debug.Log($"Downloaded the songlist with {songlist.Count} songs");
+                SongInformation.songlist = JsonConvert.DeserializeObject<List<SongDetail>>(www.downloadHandler.text);
+                Debug.Log($"Downloaded the songlist with {SongInformation.songlist.Count} songs");
+                SongInformation.sortSonglist();
                 initShowList.Invoke();
             }
             
@@ -71,14 +71,41 @@ namespace API
                 rawImage.texture = texture;
                 var scale = 250f / (float)sprite.texture.width;
                 rawImage.gameObject.transform.localScale = new Vector3(scale, scale, scale);
-                textureCache.Add(id, texture);
+                //textureCache.Add(id, texture);
             }
 
         }
 
-    
+        public static IEnumerator LoadBGFromWeb(string path, Action callback)
+        {
+            if (path == string.Empty) { Debug.LogError("empty bg path!"); yield break; }
+            UnityWebRequest bgreq = UnityWebRequest.Get(path);
+            bgreq.downloadHandler = new DownloadHandlerTexture();
+            yield return bgreq.SendWebRequest();
+            if (bgreq.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Error downloading bg: " + bgreq.error);
+            }
+            else
+            {
+                var texture = DownloadHandlerTexture.GetContent(bgreq);
+                var sprite = Sprite.Create(
+                    texture,
+                    new Rect(0.0f, 0.0f, texture.width, texture.height),
+                    new Vector2(0.5f, 0.5f));
 
-        public static IEnumerator LoadBGFromCache(string id, RawImage rawImage)
+                BGManager.spriteRender.sprite = sprite;
+                var scale = 1080f / (float)sprite.texture.width;
+                BGManager.spriteRender.transform.localScale = new Vector3(scale, scale, scale);
+                callback.Invoke();
+            }
+
+        }
+
+
+
+
+        /*public static IEnumerator LoadBGFromCache(string id, RawImage rawImage)
         {
             Texture2D texture = textureCache[id];
             Sprite sprite;
@@ -92,13 +119,9 @@ namespace API
             var scale = 250f / (float)sprite.texture.width;
             rawImage.gameObject.transform.localScale = new Vector3(scale, scale, scale);
             yield return null;
-        }
+        }*/
 
-        public static string getChartID()
-        {
-            Debug.Log(playID);
-            return songlist[playID].Id.ToString();
-        }
+
     }
 
 

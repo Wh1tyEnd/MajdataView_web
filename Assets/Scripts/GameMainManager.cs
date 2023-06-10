@@ -51,7 +51,7 @@ public class GameMainManager : MonoBehaviour
 
     void Start()
     {
-        id = WebLoader.getChartID();
+        id = SongInformation.getChartID();
         chartpath = ApiAccess.ROOT + "Maidata/" + id;
         audiopath = ApiAccess.ROOT + "Track/" + id;
         bgpath = ApiAccess.ROOT + "Image/" + id;
@@ -151,7 +151,7 @@ public class GameMainManager : MonoBehaviour
             checkReady();
         };
 
-        StartCoroutine(bgManager.LoadBGFromWeb(bgpath, bgCallback));
+        StartCoroutine(WebLoader.LoadBGFromWeb(bgpath, bgCallback));
     }
 
     // method that checks if level is empty
