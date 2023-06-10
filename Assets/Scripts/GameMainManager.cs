@@ -58,10 +58,10 @@ public class GameMainManager : MonoBehaviour
         WebLoad();
     }
 
-    public void OnBackButtonClick()
+/*    public void OnBackButtonClick()
     {
         SceneManager.LoadScene("SongLstMenu");
-    }
+    }*/
 
     // init loading & start playing method
     public void Play()

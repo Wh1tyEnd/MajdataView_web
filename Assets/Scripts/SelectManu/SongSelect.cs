@@ -111,7 +111,8 @@ public class SongSelect : MonoBehaviour
     public void playChart()
     {
         SongInformation.playID = transportID(0);
-        SceneManager.LoadScene("main");
+        //SceneManager.LoadScene("main");
+        GameObject.Find("SceneSwitchMask").GetComponent<Animator>().SetTrigger("GoMain");
     }
 
     public void moveRight()
