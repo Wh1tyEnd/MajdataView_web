@@ -78,7 +78,7 @@ public class SoundEffect: MonoBehaviour
         public string downloadUrl;
     }
     // Download audio and assign to bgm after uploaded
-    public IEnumerator LoadWebAudio(string path, Action callback = null)
+    public IEnumerator LoadWebAudio(string path, Action<float> callback = null, Action successcallback = null)
     {
         if (path == string.Empty) {Debug.LogError("Empty path!"); yield break;}
         Debug.Log("Downloading audio from " + path);
@@ -86,8 +86,8 @@ public class SoundEffect: MonoBehaviour
         trackreq.downloadHandler = new DownloadHandlerAudioClip(path,AudioType.MPEG);
         trackreq.SendWebRequest();
         while (!trackreq.isDone) {
-            //Debug.Log(trackreq.downloadProgress);
-            yield return new WaitForSecondsRealtime(0.2f);
+            callback.Invoke(trackreq.downloadProgress);
+            yield return new WaitForSecondsRealtime(0.1f);
         }
         if (trackreq.result != UnityWebRequest.Result.Success)
         {
@@ -99,8 +99,8 @@ public class SoundEffect: MonoBehaviour
             if (clip != null)
             {
                 bgmStream.clip = clip;
-                if (callback != null)
-                    callback.Invoke();
+                if (successcallback != null)
+                    successcallback.Invoke();
             }
             else { Debug.LogError("AudioClip is null!"); }
         }

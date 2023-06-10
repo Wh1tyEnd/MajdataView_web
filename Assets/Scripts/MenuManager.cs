@@ -32,9 +32,12 @@ public class MenuManager : MonoBehaviour
         PlayPause.gameObject.GetComponentsInChildren<Image>()[1].sprite = ic_play;
     }
 
-    public void SetLoadingText(int step)
+    public void SetLoadingText(int step,float progress=0f)
     {
-        loadingText.text = $"Loading ({step}/3)";
+        if(progress != 0f)
+            loadingText.text = $"Loading {progress:P1}";
+        else
+            loadingText.text = $"Loading ({step}/2)";
     }
 
     public void SetPlayMode()

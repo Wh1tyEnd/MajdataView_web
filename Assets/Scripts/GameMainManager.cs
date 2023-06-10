@@ -123,7 +123,7 @@ public class GameMainManager : MonoBehaviour
         void checkReady()
         {
             menuManager.SetLoadingText(status);
-            if(status ==3 ) {
+            if(status == 3f ) {
                 menuManager.SetReadyMode();
                 OnDropDownClick();
             }
@@ -143,7 +143,12 @@ public class GameMainManager : MonoBehaviour
             checkReady();
         };
 
-        StartCoroutine(SE.LoadWebAudio(audiopath, audioCallback));
+        Action<float> progressCallback = (float progress) =>
+        {
+            menuManager.SetLoadingText(status,progress);
+        };
+
+        StartCoroutine(SE.LoadWebAudio(audiopath, progressCallback, audioCallback));
 
         Action bgCallback = () =>
         {
