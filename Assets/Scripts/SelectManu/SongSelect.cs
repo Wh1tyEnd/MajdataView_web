@@ -197,9 +197,9 @@ public class SongSelect : MonoBehaviour
     public void setInfo(GameObject obj, int id)
     {
         obj.transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<Text>().text = WebLoader.songlist[id].Id.ToString();
-        obj.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<Text>().text = WebLoader.songlist[id].Title;
-        obj.transform.GetChild(0).GetChild(1).GetChild(2).GetComponent<Text>().text = WebLoader.songlist[id].Artist;
-        obj.transform.GetChild(0).GetChild(1).GetChild(3).GetComponent<Text>().text = WebLoader.songlist[id].Designer;
+        obj.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<TMP_Text>().text = WebLoader.songlist[id].Title;
+        obj.transform.GetChild(0).GetChild(1).GetChild(2).GetComponent<TMP_Text>().text = WebLoader.songlist[id].Artist;
+        obj.transform.GetChild(0).GetChild(1).GetChild(3).GetComponent<TMP_Text>().text = WebLoader.songlist[id].Designer;
         Debug.Log(obj.transform.GetChild(0).GetChild(0).name);
         if (WebLoader.textureCache.ContainsKey(WebLoader.songlist[id].Id.ToString()))
         {
