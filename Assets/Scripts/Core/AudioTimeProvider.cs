@@ -22,6 +22,7 @@ public class AudioTimeProvider : MonoBehaviour
         AudioTime = playStartTime;
         speed = _speed;
         SE.generateSoundEffectList(playStartTime);
+        bgm.pitch = speed;
         bgm.time = AudioTime;
         bgm.Play();
         startTime = Time.realtimeSinceStartup;
@@ -55,7 +56,10 @@ public class AudioTimeProvider : MonoBehaviour
         if (isStart)
         {
             audioOffset = settings.offset;
-            AudioTime = (Time.realtimeSinceStartup - startTime) * speed + playStartTime;
+            if(speed !=1)
+                AudioTime = (bgm.time);
+            else
+                AudioTime = (Time.realtimeSinceStartup - startTime) + playStartTime;
             var delta = AudioTime - bgm.time;
             //print(delta);
             if (AudioTime >= 0 && Mathf.Abs(delta) > 0.03)

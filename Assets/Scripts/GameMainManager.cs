@@ -54,7 +54,7 @@ public class GameMainManager : MonoBehaviour
         id = SongInformation.getChartID();
         chartpath = ApiAccess.ROOT + "Maidata/" + id;
         audiopath = ApiAccess.ROOT + "Track/" + id;
-        bgpath = ApiAccess.ROOT + "Image/" + id;
+        bgpath = ApiAccess.ROOT + "ImageFull/" + id;
         WebLoad();
     }
 
@@ -90,6 +90,7 @@ public class GameMainManager : MonoBehaviour
         }
         if (timeProvider.isStart) {
             startTime = timeProvider.AudioTime;
+            timeProvider.playStartTime = startTime;
             timeProvider.Pause();
             menuManager.SetPauseMode();
         } else {
@@ -185,5 +186,9 @@ public class GameMainManager : MonoBehaviour
             }
             else {menuManager.SetReadyMode();}
         }
+    }
+    public void OnSpeedDropDownClick(int value)
+    {
+        audioSpeed = 1f-value*0.25f;
     }
 }

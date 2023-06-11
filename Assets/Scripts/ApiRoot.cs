@@ -72,6 +72,7 @@ namespace API
 
         }
 
+        //For inner main viewer
         public static IEnumerator LoadBGFromWeb(string path, Action callback)
         {
             if (path == string.Empty) { Debug.LogError("empty bg path!"); yield break; }

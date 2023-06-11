@@ -22,7 +22,7 @@ public static class ExtensionFindMethod
 public class SettingsManager : MonoBehaviour
 {
     List<string> sliders = new List<string>{
-        "TargetFPS",
+        //"TargetFPS",
         "Offset",
         "NoteSpeed",
         "TouchSpeed",
@@ -39,7 +39,7 @@ public class SettingsManager : MonoBehaviour
         "Hanabi",
         "Others"
     };
-    public FPSMonitor fpsMonitor;
+    //public FPSMonitor fpsMonitor;
     public GameObject volumePrefab;
     public AudioMixer masterMixer;
     
@@ -59,9 +59,9 @@ public class SettingsManager : MonoBehaviour
 
     public void UpdateSliders()
     {
-        int fps = (int)Mathf.Pow(2, GetSlider("TargetFPS").value) * 30;
-        GetSliderDisplay("TargetFPS").text = fps.ToString();
-        fpsMonitor.setTargetFPS(fps);
+        //int fps = (int)Mathf.Pow(2, GetSlider("TargetFPS").value) * 30;
+        //GetSliderDisplay("TargetFPS").text = fps.ToString();
+        //fpsMonitor.setTargetFPS(fps);
         GetSliderDisplay("Offset").text = GetSlider("Offset").value.ToString() + "MS";
         GetSliderDisplay("NoteSpeed").text = (GetSlider("NoteSpeed").value / 10).ToString();
         GetSliderDisplay("TouchSpeed").text = (GetSlider("TouchSpeed").value / 10).ToString();

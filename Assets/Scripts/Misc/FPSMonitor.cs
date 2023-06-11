@@ -7,7 +7,7 @@ using TMPro;
 // 监视和设置帧数的小工具
 public class FPSMonitor : MonoBehaviour
 {
-    public int frameRate = 120;
+    public int frameRate = -1;
     
     private int _frame;
     private float _lastTime;
@@ -19,14 +19,14 @@ public class FPSMonitor : MonoBehaviour
  
     void Start()
     {
-        Application.targetFrameRate = frameRate;
+        Application.targetFrameRate = -1;
         _lastTime = Time.realtimeSinceStartup;
     }
  
     void Update()
     {
         FrameCalculate();
-        string msg = string.Format("FPS: {0:N1}({1})\nDeltaTime: {2:N4}", _Fps, frameRate, _frameDeltaTime);
+        string msg = string.Format("FPS: {0:N1}\nDeltaTime: {1:N4}", _Fps, _frameDeltaTime);
         displayer.text = msg;
     }
  
@@ -37,15 +37,9 @@ public class FPSMonitor : MonoBehaviour
  
         float time = Time.realtimeSinceStartup - _lastTime;
         _Fps = _frame / time;
-        _frameDeltaTime = time / _frame;
+        _frameDeltaTime = Time.deltaTime;
  
         _lastTime = Time.realtimeSinceStartup;
         _frame = 0;
-    }
-
-    public void setTargetFPS(int fps)
-    {
-        frameRate = fps;
-        Application.targetFrameRate = frameRate;
     }
 }

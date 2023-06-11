@@ -26,7 +26,7 @@ public class TimelineSlider : MonoBehaviour
     {
         if(timeProvider.bgm.clip)
             slider.maxValue = timeProvider.bgm.clip.length;
-        if (timeProvider.isStart && !isDragging)
+        if (!isDragging)
         {
             slider.value = timeProvider.AudioTime;
         }
