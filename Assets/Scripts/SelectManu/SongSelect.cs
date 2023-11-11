@@ -86,10 +86,10 @@ public class SongSelect : MonoBehaviour
         }
         for (int i = 0; i < listlen; i++)
         {
-            Debug.Log(i + "     " + showList.Length);
+            //Debug.Log(i + "     " + showList.Length);
             GameObject temp = Instantiate(coverSheet, new Vector2(0 + (i - centerNum) * coverDist, 0), Quaternion.identity);
             temp.transform.parent = parentConvas.transform;
-            Debug.Log(transportID(i - centerNum));
+            //Debug.Log(transportID(i - centerNum));
             setInfo(temp, transportID(i - centerNum));
             showList[i] = temp;
             if (i != centerNum)
@@ -201,7 +201,7 @@ public class SongSelect : MonoBehaviour
         obj.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<TMP_Text>().text = SongInformation.songlist[id].Title;
         obj.transform.GetChild(0).GetChild(1).GetChild(2).GetComponent<TMP_Text>().text = SongInformation.songlist[id].Artist;
         obj.transform.GetChild(0).GetChild(1).GetChild(3).GetComponent<TMP_Text>().text = SongInformation.songlist[id].Designer;
-        Debug.Log(obj.transform.GetChild(0).GetChild(0).name);
+        //Debug.Log(obj.transform.GetChild(0).GetChild(0).name);
 
         StartCoroutine(WebLoader.LoadBGFromWeb(SongInformation.songlist[id].Id.ToString(), obj.transform.GetChild(0).GetChild(0).GetComponent<RawImage>()));
         
