@@ -7,18 +7,41 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using Newtonsoft.Json;
 using JsonFormat;
+using TMPro;
 
 namespace API
 {
     class ApiAccess
     {
-        public const string ROOT = "http://101.132.193.53:5001/api/";
+        public static string ROOT = "http://101.132.193.53:5001/api/";
+        public const string majROOT = "http://101.132.193.53:5002/api/";
+        public const string mmfcROOT = "http://101.132.193.53:5001/api/";
+
+        public static void changeROOT()
+        {
+            if (majROOT.Equals(ROOT))
+            {
+                ROOT = mmfcROOT;
+            }else if (mmfcROOT.Equals(ROOT))
+            {
+                ROOT = majROOT;
+            }
+        }
     }
+
 
     class WebLoader : MonoBehaviour
     {        
-        const string SongListApiPath = ApiAccess.ROOT + "SongList";
-        const string BGApiPath = ApiAccess.ROOT + "Image/{0}";
+        static string SongListApiPath = ApiAccess.ROOT + "SongList";
+        static string BGApiPath = ApiAccess.ROOT + "Image/{0}";
+       
+
+        public static void updateApi()
+        {
+            SongListApiPath = ApiAccess.ROOT + "SongList";
+            BGApiPath = ApiAccess.ROOT + "Image/{0}";
+            
+        }
         public static IEnumerator getSongList(string path, Action initShowList)
         {
 

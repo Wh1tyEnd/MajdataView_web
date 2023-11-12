@@ -19,12 +19,13 @@ public class SongSelect : MonoBehaviour
     public GameObject buttons;
     public GameObject loading;
     public GameObject loadingtext;
+    public GameObject title;
+    public GameObject switchInfo;
 
-    
     public int idPointer = 0;
     
-    const string SongListApiPath = ApiAccess.ROOT + "SongList";
-    const string BGApiPath = ApiAccess.ROOT + "Image/{0}";
+    static string SongListApiPath = ApiAccess.ROOT + "SongList";
+    static string BGApiPath = ApiAccess.ROOT + "Image/{0}";
 
     int listlen = 9;
     GameObject[] showList;
@@ -58,6 +59,12 @@ public class SongSelect : MonoBehaviour
     
     public void init()
     {
+        for(int i = 0; i < showList.Length; i++)
+        {
+            Destroy(showList[i]);
+            showList[i] = null;
+        }
+        
         Action initAction = () =>
         {
             if (SongInformation.songlist.Count <= 0)
@@ -106,6 +113,18 @@ public class SongSelect : MonoBehaviour
         buttons.SetActive(true);
         loading.SetActive(false);
         loadingtext.SetActive(false);
+    }
+
+
+    public void switchApi()
+    {
+        ApiAccess.changeROOT();
+        SongListApiPath = ApiAccess.ROOT + "SongList";
+        BGApiPath = ApiAccess.ROOT + "Image/{0}";
+        title.GetComponent<TMP_Text>().text = ApiAccess.majROOT.Equals(ApiAccess.ROOT) ? "MMFC.LIB" : "MMFC";
+        switchInfo.GetComponent<TMP_Text>().text = ApiAccess.majROOT.Equals(ApiAccess.ROOT) ? "Switch to\nCompetition" : "Switch to\nNormal files";
+        WebLoader.updateApi();
+        init();
     }
 
     public void playChart()
