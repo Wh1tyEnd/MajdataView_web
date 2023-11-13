@@ -14,7 +14,7 @@ using API;
 public class GameMainManager : MonoBehaviour
 {
     [Header("Manager")]
-    public SimaiDataLoader loader;
+    public SimaiDataLoader simailoader;
     public AudioTimeProvider timeProvider;
     public BGManager bgManager;
     public SpriteRenderer bgCover;
@@ -43,34 +43,26 @@ public class GameMainManager : MonoBehaviour
     private bool inited = false;
     private int status = 0;
 
-    string id;
-    string chartpath;
-    string bgpath;
-    string audiopath;
+
 
 
     void Start()
     {
-        id = SongInformation.getChartID();
+        /*id = SongInformation.getChartID();
         chartpath = ApiAccess.ROOT + "Maidata/" + id;
         audiopath = ApiAccess.ROOT + "Track/" + id;
         bgpath = ApiAccess.ROOT + "ImageFull/" + id;
-        WebLoad();
+        WebLoad();*/
     }
-
-/*    public void OnBackButtonClick()
-    {
-        SceneManager.LoadScene("SongLstMenu");
-    }*/
 
     // init loading & start playing method
     public void Play()
     {
         startAt = System.DateTime.Now.Ticks;
-        loader.noteSpeed = settings.noteSpeed;
-        loader.touchSpeed = settings.touchSpeed;
+        simailoader.noteSpeed = settings.noteSpeed;
+        simailoader.touchSpeed = settings.touchSpeed;
         SimaiProcess.Serialize(SimaiProcess.fumens[menuManager.level]);
-        loader.PlayLevel(startTime);
+        simailoader.PlayLevel(startTime);
         timeProvider.SetStartTime(startTime - offset, audioSpeed);
         objectCounter.ComboSetActive(settings.combo);
         multTouchHandler.clearSlots();
@@ -118,8 +110,11 @@ public class GameMainManager : MonoBehaviour
         menuManager.SetReadyMode();
     }
 
-    public void WebLoad()
+    public void WebLoad(string chartpath, string bgpath, string audiopath)
     {
+        OnStopButtonClick();
+        menuManager.SetInitMode();
+        status = 0;
         //载入各种资源，完成后准备菜单
         void checkReady()
         {
@@ -136,7 +131,7 @@ public class GameMainManager : MonoBehaviour
             checkReady();
         };
 
-        StartCoroutine(loader.initFromWeb(chartpath, successCallback));
+        StartCoroutine(simailoader.initFromWeb(chartpath, successCallback));
 
         Action audioCallback = () =>
         {

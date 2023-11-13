@@ -32,11 +32,13 @@ public class MenuManager : MonoBehaviour
         levelSelector.interactable = false;
         speedSelector.interactable = false;
         PlayPause.gameObject.GetComponentsInChildren<Image>()[1].sprite = ic_play;
+        loadingText.gameObject.SetActive(false);
     }
 
     public void SetLoadingText(int step,float progress=0f)
     {
-        if(progress != 0f)
+        loadingText.gameObject.SetActive(true);
+        if (progress != 0f)
             loadingText.text = $"Loading {progress:P1}";
         else
             loadingText.text = $"Loading ({step}/2)";
@@ -60,8 +62,7 @@ public class MenuManager : MonoBehaviour
 
     public void SetReadyMode()
     {
-        if(loadingText)
-            Destroy(loadingText.gameObject);
+        loadingText.gameObject.SetActive(false);
         PlayPause.interactable = true;
         Stop.interactable = false;
         levelSelector.interactable = true;
