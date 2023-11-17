@@ -9,9 +9,9 @@ public class HandleJSMessages : MonoBehaviour
     private void Awake()
     {
         Application.targetFrameRate = 5;
-        WebGLInput.captureAllKeyboardInput = false;
         if (Application.platform == RuntimePlatform.WebGLPlayer)
         {
+            WebGLInput.captureAllKeyboardInput = false;
             Debug.Log("HandleJSMessages Activated");//look for this message in the browser to ensure its working, delete before production
             DontDestroyOnLoad(this);
         }
@@ -25,15 +25,17 @@ public class HandleJSMessages : MonoBehaviour
     IEnumerator startAfter()
     {
         yield return new WaitForSeconds(2);
+        Application.targetFrameRate = -1;
         var apiroot = "http://101.132.193.53:5002/api";
-        var id = "148";
-        var level = "lv0";
+        var id = "1";
+        var level = "lv4";
         Debug.Log("level:" + level);
         gameMainManager = GameObject.Find("GameMain").GetComponent<GameMainManager>();
 
         gameMainManager.WebLoad(apiroot + "/Maidata/" + id,
             apiroot + "/ImageFull/" + id,
-            apiroot + "/Track/" + id);
+            apiroot + "/Track/" + id,
+            int.Parse(level[2].ToString()));
     }
 
     /// <summary>
@@ -47,13 +49,14 @@ public class HandleJSMessages : MonoBehaviour
         var type = parts[0];
         var apiroot = parts[1];
         var id = parts[2];
-        var level = parts[3].Substring(1);
+        var level = parts[3];
         Debug.Log("level:"+level);
         gameMainManager = GameObject.Find("GameMain").GetComponent<GameMainManager>();
 
         gameMainManager.WebLoad(apiroot + "/Maidata/" + id,
             apiroot + "/ImageFull/" + id,
-            apiroot + "/Track/" + id);
+            apiroot + "/Track/" + id,
+            int.Parse(level[2].ToString()));
         
     }
 }

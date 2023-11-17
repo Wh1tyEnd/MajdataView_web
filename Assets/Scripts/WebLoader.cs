@@ -23,6 +23,7 @@ namespace API
             if (bgreq.result != UnityWebRequest.Result.Success)
             {
                 Debug.LogError("Error downloading bg: " + bgreq.error);
+                callback.Invoke();
             }
             else
             {

@@ -61,7 +61,7 @@ public class GameMainManager : MonoBehaviour
         startAt = System.DateTime.Now.Ticks;
         simailoader.noteSpeed = settings.noteSpeed;
         simailoader.touchSpeed = settings.touchSpeed;
-        SimaiProcess.Serialize(SimaiProcess.fumens[menuManager.level]);
+        //SimaiProcess.Serialize(SimaiProcess.fumens[menuManager.level]);
         simailoader.PlayLevel(startTime);
         timeProvider.SetStartTime(startTime - offset, audioSpeed);
         objectCounter.ComboSetActive(settings.combo);
@@ -110,7 +110,7 @@ public class GameMainManager : MonoBehaviour
         menuManager.SetReadyMode();
     }
 
-    public void WebLoad(string chartpath, string bgpath, string audiopath)
+    public void WebLoad(string chartpath, string bgpath, string audiopath, int level)
     {
         OnStopButtonClick();
         menuManager.SetInitMode();
@@ -119,9 +119,28 @@ public class GameMainManager : MonoBehaviour
         void checkReady()
         {
             menuManager.SetLoadingText(status);
-            if(status == 3f ) {
+            if(status >= 3f ) {
                 menuManager.SetReadyMode();
-                OnDropDownClick();
+                string fumens = SimaiProcess.fumens[level];
+                if (fumens == null)
+                {
+                    Debug.Log("Null level!");
+                    menuManager.DisablePlay();
+                    return;
+                }
+                if (SimaiProcess.Serialize(fumens) == -1)
+                {
+                    menuManager.DisablePlay();
+                    return;
+                }
+                Debug.Log("Total notes: " + SimaiProcess.notelist.Count);
+                if (SimaiProcess.notelist.Count <= 0)
+                {
+                    Debug.Log("Empty level!");
+                    menuManager.DisablePlay();
+                    return;
+                }
+                else { menuManager.SetReadyMode(); }
             }
         }
         // open maidata.txt
@@ -155,33 +174,6 @@ public class GameMainManager : MonoBehaviour
         StartCoroutine(WebLoader.LoadBGFromWeb(bgpath, bgCallback));
     }
 
-    // method that checks if level is empty
-    public void OnDropDownClick()
-    {
-        int levelIndex = menuManager.level;
-        Debug.Log("finding level: " + levelIndex);
-        string fumens = SimaiProcess.fumens[levelIndex];
-        if (fumens == null)
-        {
-            Debug.Log("Null level!");
-            menuManager.DisablePlay();
-        }
-        else
-        {
-            if (SimaiProcess.Serialize(fumens) == -1) 
-            {
-            menuManager.DisablePlay();
-                return;
-            }
-            Debug.Log("Total notes: "+SimaiProcess.notelist.Count);
-            if (SimaiProcess.notelist.Count <= 0)
-            {
-                Debug.Log("Empty level!");
-                menuManager.DisablePlay();
-            }
-            else {menuManager.SetReadyMode();}
-        }
-    }
     public void OnSpeedDropDownClick(int value)
     {
         audioSpeed = 1f-value*0.25f;

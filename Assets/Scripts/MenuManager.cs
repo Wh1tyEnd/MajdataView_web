@@ -10,7 +10,6 @@ public class MenuManager : MonoBehaviour
     public GameObject OverlayMenu;
     public Button PlayPause;
     public Button Stop;
-    public TMP_Dropdown levelSelector;
     public TMP_Dropdown speedSelector;
     public TMP_Text loadingText;
     public Sprite ic_home;
@@ -29,7 +28,6 @@ public class MenuManager : MonoBehaviour
     {
         PlayPause.interactable = false;
         Stop.interactable = false;
-        levelSelector.interactable = false;
         speedSelector.interactable = false;
         PlayPause.gameObject.GetComponentsInChildren<Image>()[1].sprite = ic_play;
         loadingText.gameObject.SetActive(false);
@@ -47,7 +45,6 @@ public class MenuManager : MonoBehaviour
     public void SetPlayMode()
     {
         Stop.interactable = true;
-        levelSelector.interactable = false;
         speedSelector.interactable = false;
         PlayPause.gameObject.GetComponentsInChildren<Image>()[1].sprite = ic_pause;
     }
@@ -55,7 +52,6 @@ public class MenuManager : MonoBehaviour
     public void SetPauseMode()
     {
         Stop.interactable = true;
-        levelSelector.interactable = false;
         speedSelector.interactable= false;
         PlayPause.gameObject.GetComponentsInChildren<Image>()[1].sprite = ic_play;
     }
@@ -65,7 +61,6 @@ public class MenuManager : MonoBehaviour
         loadingText.gameObject.SetActive(false);
         PlayPause.interactable = true;
         Stop.interactable = false;
-        levelSelector.interactable = true;
         speedSelector.interactable = true;
         PlayPause.gameObject.GetComponentsInChildren<Image>()[1].sprite = ic_play;
     }
@@ -74,12 +69,9 @@ public class MenuManager : MonoBehaviour
     {
         PlayPause.interactable = false;
         Stop.interactable = false;
-        levelSelector.interactable = true;
         speedSelector.interactable = true;
     }
 
-
-    public int level { get { return levelSelector.value; } }
 
     public void ShowWindow(string fumen)
     {

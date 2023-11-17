@@ -19,7 +19,6 @@ public class FPSMonitor : MonoBehaviour
  
     void Start()
     {
-        Application.targetFrameRate = -1;
         _lastTime = Time.realtimeSinceStartup;
     }
  
