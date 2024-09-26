@@ -78,91 +78,39 @@ public class SoundEffect: MonoBehaviour
         public string downloadUrl;
     }
     // Download audio and assign to bgm after uploaded
-        public IEnumerator LoadWebAudio(string path, Action callback = null)
+    public IEnumerator LoadWebAudio(string path, Action<float> callback = null, Action successcallback = null)
     {
         if (path == string.Empty) {Debug.LogError("Empty path!"); yield break;}
         Debug.Log("Downloading audio from " + path);
-        UnityWebRequest previous = UnityWebRequest.Get(path);
-        yield return previous.SendWebRequest();
-        
-        if (previous.result != UnityWebRequest.Result.Success)
+        UnityWebRequest trackreq = UnityWebRequest.Get(path);
+        trackreq.downloadHandler = new DownloadHandlerAudioClip(path,AudioType.MPEG);
+        trackreq.SendWebRequest();
+        while (!trackreq.isDone) {
+            callback.Invoke(trackreq.downloadProgress);
+            yield return new WaitForSecondsRealtime(0.1f);
+        }
+        if (trackreq.result != UnityWebRequest.Result.Success)
         {
-            Debug.LogError("Error downloading audio: " + previous.error);
+            Debug.LogError("Error downloading audio: " + trackreq.error);
         }
         else
         {
-            string truePath = JsonUtility.FromJson<audioUrl>(previous.downloadHandler.text).downloadUrl;
-            UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(truePath, AudioType.MPEG);
-            yield return www.SendWebRequest();
-            Debug.Log(truePath);
-            if (www.result != UnityWebRequest.Result.Success)
+            var clip = DownloadHandlerAudioClip.GetContent(trackreq);
+            if (clip != null)
             {
-                Debug.LogError("Error downloading audio: " + www.error);
+                bgmStream.clip = clip;
+                if (successcallback != null)
+                    successcallback.Invoke();
             }
-            else
-            {
-                var clip = DownloadHandlerAudioClip.GetContent(www);
-                if (clip != null)
-                {
-                    bgmStream.clip = clip;
-                    if (callback != null)
-                        callback.Invoke();
-                }
-                else { Debug.LogError("AudioClip is null!"); }
-            }
+            else { Debug.LogError("AudioClip is null!"); }
         }
         
     }
 
-    /*public IEnumerator LoadWebAudio(string path, Action callback = null)
-    {
-        if (path == string.Empty) {Debug.LogError("Empty path!"); yield break;}
-        Debug.Log("Downloading audio from " + path);
-        UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(path, AudioType.MPEG);
-        yield return www.SendWebRequest();
- 
-        if (www.result != UnityWebRequest.Result.Success) {
-            Debug.LogError("Error downloading audio: " + www.error);
-        }
-        else
-        {
-            var clip = DownloadHandlerAudioClip.GetContent(www);
-            if(clip != null) {
-                bgmStream.clip = clip;
-                if (callback != null)
-                    callback.Invoke();
-            } else {Debug.LogError("AudioClip is null!");}
-        }
-    }*/
-
-    public void generateSoundEffectList(double startTime, bool isOpIncluded)
+    public void generateSoundEffectList(double startTime)
     {
         songLength = bgmStream.clip.length;
         waitToBePlayed = new List<SoundEffectTiming>();
-        if (isOpIncluded)
-        {
-            waitToBePlayed.Add(new SoundEffectTiming(-5f, _hasTrackStart: true));
-            var cmds = SimaiProcess.other_commands.Split('\n');
-            foreach (var cmdl in cmds)
-            {
-                if (cmdl.Length > 12 && cmdl.Substring(1, 11) == "clock_count")
-                {
-                    try
-                    {
-                        int clock_cnt = int.Parse(cmdl.Substring(13));
-                        double clock_int = 60.0d / SimaiProcess.notelist[0].currentBpm;
-                        for (int i = 0; i < clock_cnt; i++)
-                        {
-                            waitToBePlayed.Add(new SoundEffectTiming(i * clock_int, _hasClock: true));
-                        }
-                    }
-                    catch
-                    {
-
-                    }
-                }
-            }
-        }
         foreach (var noteGroup in SimaiProcess.notelist)
         {
             if (noteGroup.time < startTime) { continue; }
@@ -343,10 +291,6 @@ public class SoundEffect: MonoBehaviour
                 waitToBePlayed.Add(stobj);
             }
         }
-        if (isOpIncluded)
-        {
-            waitToBePlayed.Add(new SoundEffectTiming(GetAllPerfectStartTime(), _hasAllPerfect: true));
-        }
         waitToBePlayed.Sort((o1, o2) => o1.time < o2.time ? -1 : 1);
 
         double apTime = GetAllPerfectStartTime();
@@ -395,11 +339,10 @@ public class SoundEffect: MonoBehaviour
         }
         return latestNoteFinishTime;
     }
-    public void SoundEffectUpdate()
+    public void SoundEffectUpdate(float audioOffset)
     {
-        try
-        {
-            var currentTime = timeProvider.AudioTime;
+
+            var currentTime = timeProvider.AudioTime + audioOffset;
             // var waitToBePlayed = SimaiProcess.notelist.FindAll(o => o.havePlayed == false && o.time > currentTime);
             if (waitToBePlayed.Count < 1) return;
             var nearestTime = waitToBePlayed[0].time;
@@ -464,7 +407,5 @@ public class SoundEffect: MonoBehaviour
                     clockStream.Play();
                 }
             }
-        }
-        catch { }
     }
 }

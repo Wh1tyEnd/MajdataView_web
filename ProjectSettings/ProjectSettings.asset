@@ -46,7 +46,7 @@ PlayerSettings:
   m_HolographicTrackingLossScreen: {fileID: 0}
   defaultScreenWidth: 960
   defaultScreenHeight: 600
-  defaultScreenWidthWeb: 960
+  defaultScreenWidthWeb: 1066
   defaultScreenHeightWeb: 600
   m_StereoRenderingPath: 0
   m_ActiveColorSpace: 0
@@ -679,7 +679,7 @@ PlayerSettings:
   webGLDebugSymbols: 0
   webGLEmscriptenArgs: 
   webGLModulesDirectory: 
-  webGLTemplate: APPLICATION:Minimal
+  webGLTemplate: APPLICATION:Default
   webGLAnalyzeBuildSize: 0
   webGLUseEmbeddedResources: 0
   webGLCompressionFormat: 2
@@ -693,7 +693,8 @@ PlayerSettings:
   platformArchitecture: {}
   scriptingBackend:
     Standalone: 0
-  il2cppCompilerConfiguration: {}
+  il2cppCompilerConfiguration:
+    WebGL: 2
   managedStrippingLevel:
     EmbeddedLinux: 1
     GameCoreScarlett: 1

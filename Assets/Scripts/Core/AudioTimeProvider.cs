@@ -9,39 +9,24 @@ public class AudioTimeProvider : MonoBehaviour
 
     float startTime;
     float speed;
-    long ticks = 0;
     public bool isStart = false;
-    public bool isRecord = false;
-    public float offset = 0f;
+    public float playStartTime = 0f;
     public float audioOffset = 0f;
     public AudioSource bgm;
     public SoundEffect SE;
+    public SettingsManager settings;
 
-    public void SetStartTime(long _ticks, float _offset, float _speed, bool _isRecord = false)
+    public void SetStartTime(float _playStartTime, float _speed)
     {
-        ticks = _ticks;
-        offset = _offset;
-        AudioTime = offset;
-        var dateTime = new DateTime(ticks);
-        var seconds = (dateTime - DateTime.Now).TotalSeconds;
-        isRecord = _isRecord;
+        playStartTime = _playStartTime;
+        AudioTime = playStartTime;
         speed = _speed;
-        Debug.Log("offset = " + offset);
-        SE.generateSoundEffectList(offset, isRecord);
-        if (_isRecord)
-        {
-            startTime = Time.time + 5f + audioOffset;
-        }
-        else
-        {
-            startTime = Time.time + audioOffset;
-        }
+        SE.generateSoundEffectList(playStartTime);
+        bgm.pitch = speed;
+        bgm.time = AudioTime;
+        bgm.Play();
+        startTime = Time.realtimeSinceStartup;
         isStart = true;
-        bgm.time = 0f;
-        if(isRecord)
-            bgm.PlayDelayed(5f);
-        else
-            bgm.Play();
     }
 
     public void Pause()
@@ -52,41 +37,51 @@ public class AudioTimeProvider : MonoBehaviour
 
     public void Resume()
     {
-        startTime = Time.time + audioOffset;
-        offset = AudioTime - audioOffset;
+        startTime = Time.realtimeSinceStartup;
+        playStartTime = AudioTime;
         isStart = true;
-        bgm.time = AudioTime - audioOffset;
+        bgm.time = AudioTime;
         bgm.Play();
     }
 
     public void ResetStartTime()
     {
-        offset = 0f;
-        AudioTime = 0f;
-        bgm.Stop();
         isStart = false;
+        AudioTime = playStartTime;
+        bgm.Stop();
     }
 
     void Update()
     {
         if (isStart)
         {
-            AudioTime = (Time.time - startTime) * speed + offset;
-            // AudioTime = bgm.time;
-            SE.SoundEffectUpdate();
-            if (AudioTime >= 0 && Mathf.Abs(AudioTime - audioOffset - bgm.time) > 0.05)
+            audioOffset = settings.offset;
+            if(speed !=1)
+                AudioTime = (bgm.time);
+            else
+                AudioTime = (Time.realtimeSinceStartup - startTime) + playStartTime;
+            var delta = AudioTime - bgm.time;
+            //print(delta);
+            if (AudioTime >= 0 && Mathf.Abs(delta) > 0.03)
             {
-                Debug.Log("bgm time delay > 0.05");
-                if(AudioTime + audioOffset > bgm.clip.length) {
+                Debug.LogError("bgm time delay > 0.03");
+                if(AudioTime > bgm.clip.length) {
                     bgm.Stop();
-                    ResetStartTime();
+                    isStart = false;
                 }
-                // bgm.time = AudioTime;
-                if (AudioTime + audioOffset > bgm.time)
-                    startTime += Mathf.Abs(AudioTime - audioOffset - bgm.time);
+                if (AudioTime > bgm.time)
+                    startTime += Mathf.Abs(delta)*0.7f;
                 else
-                    startTime -= Mathf.Abs(AudioTime - audioOffset - bgm.time);
+                    startTime -= Mathf.Abs(delta)*0.7f;
             }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+       if(isStart)
+        {
+            SE.SoundEffectUpdate(audioOffset);
         }
     }
 }

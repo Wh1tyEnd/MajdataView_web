@@ -9,6 +9,7 @@ using System.IO;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using API;
 
 public class GameMainManager : MonoBehaviour
 {
@@ -20,7 +21,6 @@ public class GameMainManager : MonoBehaviour
     public MultTouchHandler multTouchHandler;
     public ObjectCounter objectCounter;
     public Transform Notes;
-    public GameObject SongDetail;
     public SoundEffect SE;
     public MenuManager menuManager;
     public SettingsManager settings;
@@ -31,7 +31,6 @@ public class GameMainManager : MonoBehaviour
 
     [Space(10)]
     [Header("Settings")]
-    public int difficulty = 0;
     public float startTime = 0f;
     public long startAt;
     public float audioSpeed = 1f;
@@ -52,73 +51,65 @@ public class GameMainManager : MonoBehaviour
 
     void Start()
     {
-        id = PlayerPrefs.GetString("id");
-        //string MMFCpath = "https://www.maimaimfc.ink/_functions/contestList";
-        chartpath = "https://www.maimaimfc.ink/_functions/contestEntry/" + id + "/1";
-        audiopath = "https://www.maimaimfc.ink/_functions/contestEntry/" + id + "/2";
-        bgpath = "https://www.maimaimfc.ink/_functions/contestEntry/" + id + "/3";
-        //StartCoroutine(getMMFCList(MMFCpath));
-        WebUpload();
-
+        id = SongInformation.getChartID();
+        chartpath = ApiAccess.ROOT + "Maidata/" + id;
+        audiopath = ApiAccess.ROOT + "Track/" + id;
+        bgpath = ApiAccess.ROOT + "ImageFull/" + id;
+        WebLoad();
     }
+
+/*    public void OnBackButtonClick()
+    {
+        SceneManager.LoadScene("SongLstMenu");
+    }*/
+
     // init loading & start playing method
-    public void ChickStart()
+    public void Play()
     {
         startAt = System.DateTime.Now.Ticks;
-        loader.noteSpeed = (float)(107.25 / (71.4184491 * Mathf.Pow(settings.noteSpeed + 0.9975f, -0.985558604f)));
+        loader.noteSpeed = settings.noteSpeed;
         loader.touchSpeed = settings.touchSpeed;
-        timeProvider.audioOffset = settings.offset;
-        timeProvider.SetStartTime(startAt, startTime - offset, audioSpeed, menuManager.isRecord);
+        SimaiProcess.Serialize(SimaiProcess.fumens[menuManager.level]);
+        loader.PlayLevel(startTime);
+        timeProvider.SetStartTime(startTime - offset, audioSpeed);
         objectCounter.ComboSetActive(settings.combo);
-        loader.PlayLevel(menuManager.level, startTime);
         multTouchHandler.clearSlots();
-        bgCover.color = new Color(0f, 0f, 0f, settings.bgCover);
-
-        if (menuManager.isRecord)
-        {
-            Notes.GetComponent<PlayAllPerfect>().enabled = true;
-            // disable playpause btn to prevent errors
-            bgManager.PlaySongDetail();
-        }
-        else
-        {
-            Notes.GetComponent<PlayAllPerfect>().enabled = false;
-        }
+        Notes.GetComponent<PlayAllPerfect>().enabled = false;
         inited = true;
         // set btn states
         menuManager.SetPlayMode();
-        menuManager.HideMenu();
     }
 
     // callback of play/pause button
-    public void TogglePlay()
+    public void OnPlayPauseButtonClick()
     {
-        if (!inited) {ChickStart();return;}
+        if (!inited) {
+            //startTime = timeProvider.AudioTime;
+            Play();
+            return;
+        }
         if (timeProvider.isStart) {
+            startTime = timeProvider.AudioTime;
+            timeProvider.playStartTime = startTime;
             timeProvider.Pause();
-            bgManager.PauseVideo();
             menuManager.SetPauseMode();
         } else {
             timeProvider.Resume();
-            bgManager.ContinueVideo(audioSpeed);
             menuManager.SetPlayMode();
         }
     }
 
     // callback of stop button
-    public void ChickStop()
+    public void OnStopButtonClick()
     {
         // hide bgcover
         bgCover.color = new Color(0f, 0f, 0f, 0f);
         // reset audiotime
-        startTime = 0f;
         timeProvider.ResetStartTime();
         // destroy all notes
         foreach (Transform child in Notes.transform) {
             GameObject.Destroy(child.gameObject);
         }
-        // disable songdetail
-        SongDetail.SetActive(false);
         // re-init on next start
         inited = false;
         // reset counter
@@ -127,119 +118,50 @@ public class GameMainManager : MonoBehaviour
         menuManager.SetReadyMode();
     }
 
-    // callback of upload button
-    public void ChickLoad()
+    public void WebLoad()
     {
-        /* #if UNITY_EDITOR
-             EditorLoad();
-         #elif UNITY_WEBGL
-             WebUpload();
-         #endif*/
-
-        SceneManager.LoadScene("SongLstMenu");
-
-
-    }
-
-    void EditorLoad()
-    {
-        if (status == 0)
+        //载入各种资源，完成后准备菜单
+        void checkReady()
         {
-            loader.initFromFile(editorInitPath);
-            Action audioCallback = () =>
-            {
+            menuManager.SetLoadingText(status);
+            if(status == 3f ) {
                 menuManager.SetReadyMode();
-                UpdateLevel();
-                status = 3;
-            };
-            StartCoroutine(SE.LoadWebAudio(editorInitPath+"\\track.mp3", audioCallback));
-        } else if (status == 3)
-        // reset
-        {SceneManager.LoadScene(0, LoadSceneMode.Single);}
-    }
-
-    public void WebUpload()
-    {
-        if (status == 0)
-        {
-            // open maidata.txt
-            Action successCallback = () =>
-            {
-                status = 1;
-                WebUpload();
-
-            };
-
-            StartCoroutine(loader.initFromWeb(chartpath, successCallback));
+                OnDropDownClick();
+            }
         }
-        else if(status == 1)
+        // open maidata.txt
+        Action successCallback = () =>
         {
-            Action audioCallback = () =>
-            {
-                status = 2;
-                WebUpload();
-            };
-   
-            StartCoroutine(SE.LoadWebAudio(audiopath, audioCallback));
-        }
-        else if (status == 2)
+            status += 1;
+            checkReady();
+        };
+
+        StartCoroutine(loader.initFromWeb(chartpath, successCallback));
+
+        Action audioCallback = () =>
         {
-            Action bgCallback = () =>
-            {
-                menuManager.SetReadyMode();
-                UpdateLevel();
-                status = 3;
+            status += 1;
+            checkReady();
+        };
 
-            };
-
-            StartCoroutine(bgManager.LoadBGFromWeb(bgpath, bgCallback));
-        }
-        
-            
-            
-            //WebFileUploaderHelper.RequestFile(uploadedCallback, ".txt");
-        
-        
-        else if (status == 3)
-        // reset
-
-        {  Debug.Log(status); SceneManager.LoadScene("SongLstMenu");}
-
-    }
-    [Serializable]
-    public class SongList
-    {
-        public List<SongInfo> info;
-    }
-    [Serializable]
-    public class SongInfo
-    {
-        public string Title;
-        public string sequenceID;
-    }
-
-    public IEnumerator getMMFCList(string path)
-    {
-        if (path == string.Empty) { Debug.LogError("Empty path!"); yield break; }
-        Debug.Log("Downloading song list from " + path);
-        UnityWebRequest www = UnityWebRequest.Get(path);
-        yield return www.SendWebRequest();
-
-        if (www.result != UnityWebRequest.Result.Success)
+        Action<float> progressCallback = (float progress) =>
         {
-            Debug.LogError("Error downloading data: " + www.error);
-        }
-        else
+            menuManager.SetLoadingText(status,progress);
+        };
+
+        StartCoroutine(SE.LoadWebAudio(audiopath, progressCallback, audioCallback));
+
+        Action bgCallback = () =>
         {
-            string songs = "{\"info\":" + www.downloadHandler.text + "}";
-            Debug.Log(songs);
-            SongList songlist = JsonUtility.FromJson<SongList>(songs);
-            Debug.Log(songlist.info[0].Title);
-        }
+            status += 1;
+            checkReady();
+        };
+
+        StartCoroutine(WebLoader.LoadBGFromWeb(bgpath, bgCallback));
     }
 
     // method that checks if level is empty
-    public void UpdateLevel()
+    public void OnDropDownClick()
     {
         int levelIndex = menuManager.level;
         Debug.Log("finding level: " + levelIndex);
@@ -264,5 +186,9 @@ public class GameMainManager : MonoBehaviour
             }
             else {menuManager.SetReadyMode();}
         }
+    }
+    public void OnSpeedDropDownClick(int value)
+    {
+        audioSpeed = 1f-value*0.25f;
     }
 }
