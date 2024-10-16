@@ -26,8 +26,8 @@ public class HandleJSMessages : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         Application.targetFrameRate = -1;
-        var apiroot = "http://101.132.193.53:5002/api";
-        var id = "1";
+        var apiroot = "https://majdata.net/api1/api";
+        var id = "32";
         var level = "lv4";
         Debug.Log("level:" + level);
         gameMainManager = GameObject.Find("GameMain").GetComponent<GameMainManager>();

@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using Newtonsoft.Json;
-using JsonFormat;
 using TMPro;
 
 namespace API
@@ -22,7 +20,7 @@ namespace API
             yield return bgreq.SendWebRequest();
             if (bgreq.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError("Error downloading bg: " + bgreq.error);
+                Debug.LogError("Error downloading bg: " + bgreq.error + bgreq.downloadHandler.error);
                 callback.Invoke();
             }
             else
