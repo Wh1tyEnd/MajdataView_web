@@ -34,8 +34,7 @@ public class TimelineSlider : MonoBehaviour
     void OnDragStart(float value)
     {
         isDragging = true;
-        if(timeProvider.isStart)
-            gameMainManager.OnStopButtonClick();
+        gameMainManager.OnStopButtonClick();
         gameMainManager.startTime = value;
         timeProvider.AudioTime = value;
     }

@@ -39,7 +39,7 @@ public class MenuManager : MonoBehaviour
         if (progress != 0f)
             loadingText.text = $"Loading {progress:P1}";
         else
-            loadingText.text = $"Loading ({step}/2)";
+            loadingText.text = $"Loading ({step}/4)";
     }
 
     public void SetPlayMode()

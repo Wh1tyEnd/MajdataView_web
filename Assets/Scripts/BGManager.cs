@@ -14,18 +14,40 @@ public class BGManager : MonoBehaviour
     SpriteRenderer BackgroundCover;
     public SettingsManager settings;
     public VideoPlayer videoPlayer;
+    public GameObject videoTarget;
+    public bool isAnyErr = false;
 
     void Start()
     {
         spriteRender = GetComponent<SpriteRenderer>();
         BackgroundCover = GameObject.Find("BackgroundCover").GetComponent<SpriteRenderer>();
+        videoPlayer.errorReceived += VideoPlayer_errorReceived;
+        SetNewSpriteForVideo();
     }
-    
+
+    private void VideoPlayer_errorReceived(VideoPlayer source, string message)
+    {
+        Debug.Log("LoadVideoFailed");
+        isAnyErr = true;
+    }
+
+    public void SetNewSpriteForVideo()
+    {
+        videoTarget.GetComponent<SpriteRenderer>().sprite =
+                Sprite.Create(new Texture2D(480, 480), new Rect(0, 0, 480, 480), new Vector2(0.5f, 0.5f));
+    }
+
+    public void UpdateVideoRatio()
+    {
+        var scale = videoPlayer.height / (float)videoPlayer.width;
+        videoTarget.transform.localScale = new Vector3(2.25f, 2.25f * scale);
+    }
 
     public void Update()
     {
-        if(videoPlayer.isActiveAndEnabled) {
-            spriteRender.forceRenderingOff = videoPlayer.isPlaying;
+        if(!isAnyErr) {
+            if(!videoPlayer.isPaused)
+                spriteRender.forceRenderingOff = videoPlayer.isPlaying;
         }
         else
         {

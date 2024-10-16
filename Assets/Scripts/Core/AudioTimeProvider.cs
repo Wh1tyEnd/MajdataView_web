@@ -64,7 +64,7 @@ public class AudioTimeProvider : MonoBehaviour
             //print(delta);
             if (AudioTime >= 0 && Mathf.Abs(delta) > 0.03)
             {
-                Debug.LogError("bgm time delay > 0.03");
+                //Debug.LogError("bgm time delay > 0.03");
                 if(AudioTime > bgm.clip.length) {
                     bgm.Stop();
                     isStart = false;

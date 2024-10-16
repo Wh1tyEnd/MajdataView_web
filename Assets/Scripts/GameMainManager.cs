@@ -47,7 +47,7 @@ public class GameMainManager : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(DebugStart());
+        //StartCoroutine(DebugStart());
     }
 
     IEnumerator DebugStart()
@@ -77,8 +77,12 @@ public class GameMainManager : MonoBehaviour
         inited = true;
         // set btn states
         menuManager.SetPlayMode();
-        bgManager.videoPlayer.time = startTime - offset;
-        bgManager.videoPlayer.Play();
+        var vtime = startTime - offset;
+        if (vtime == 0)
+        {
+            bgManager.videoPlayer.playbackSpeed = audioSpeed;
+            bgManager.videoPlayer.Play();
+        }
     }
 
     // callback of play/pause button
@@ -128,17 +132,18 @@ public class GameMainManager : MonoBehaviour
         timeProvider.AudioTime = 0f;
         timeProvider.playStartTime = 0f;
         menuManager.SetInitMode();
+        bgManager.isAnyErr = false;
         if(videopath != null)
         {
             bgManager.videoPlayer.url = videopath;
-            bgManager.videoPlayer.Prepare();
+            
         }
         status = 0;
         //载入各种资源，完成后准备菜单
         void checkReady()
         {
             menuManager.SetLoadingText(status);
-            if(status >= 3f ) {
+            if(status >= 4f ) {
                 menuManager.SetReadyMode();
                 string fumens = SimaiProcess.fumens[level];
                 if (fumens == null)
@@ -159,7 +164,10 @@ public class GameMainManager : MonoBehaviour
                     menuManager.DisablePlay();
                     return;
                 }
-                else { menuManager.SetReadyMode(); }
+                else {
+                    bgManager.UpdateVideoRatio();
+                    menuManager.SetReadyMode(); 
+                }
             }
         }
         // open maidata.txt
@@ -191,6 +199,28 @@ public class GameMainManager : MonoBehaviour
         };
 
         StartCoroutine(WebLoader.LoadBGFromWeb(bgpath, bgCallback));
+        Action videoCallback = () =>
+        {
+            status += 1;
+            checkReady();
+        };
+        StartCoroutine(WaitVideoPrepare(videoCallback));
+    }
+
+    IEnumerator WaitVideoPrepare(Action callback)
+    {
+        bgManager.videoPlayer.Prepare();
+        var startTime = Time.time;
+        while (!bgManager.videoPlayer.isPrepared)
+        {
+            yield return new WaitForEndOfFrame();
+            if(Time.time - startTime  > 2f)
+            {
+                Debug.Log("No video for this song? maybe because it does not throw, FUCK YOU UNITY");
+                break;
+            }
+        }
+        callback.Invoke();
     }
 
     public void OnSpeedDropDownClick(int value)
