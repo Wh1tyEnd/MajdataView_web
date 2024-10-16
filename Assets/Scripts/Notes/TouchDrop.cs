@@ -54,7 +54,7 @@ public class TouchDrop : MonoBehaviour
         timeProvider = GameObject.Find("AudioTimeProvider").GetComponent<AudioTimeProvider>();
         multTouchHandler = GameObject.Find("MultTouchHandler").GetComponent<MultTouchHandler>();
 
-        firework = GameObject.Find("Firework");
+        firework = GameObject.Find("Firework_effect");
         fireworkEffect = firework.GetComponent<Animator>();
 
         for (int i = 0; i < 7; i++)

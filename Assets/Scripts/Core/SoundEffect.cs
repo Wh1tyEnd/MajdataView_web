@@ -99,6 +99,7 @@ public class SoundEffect: MonoBehaviour
             if (clip != null)
             {
                 bgmStream.clip = clip;
+                bgmStream.clip.LoadAudioData();
                 if (successcallback != null)
                     successcallback.Invoke();
             }

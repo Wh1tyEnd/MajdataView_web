@@ -35,6 +35,7 @@ public class HandleJSMessages : MonoBehaviour
         gameMainManager.WebLoad(apiroot + "/Maidata/" + id,
             apiroot + "/ImageFull/" + id,
             apiroot + "/Track/" + id,
+            apiroot + "/Video/" + id,
             int.Parse(level[2].ToString()));
     }
 
@@ -56,6 +57,7 @@ public class HandleJSMessages : MonoBehaviour
         gameMainManager.WebLoad(apiroot + "/Maidata/" + id,
             apiroot + "/ImageFull/" + id,
             apiroot + "/Track/" + id,
+            apiroot + "/Video/" + id,
             int.Parse(level[2].ToString()));
         
     }

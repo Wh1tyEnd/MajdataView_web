@@ -41,7 +41,7 @@ public class TouchHoldDrop : MonoBehaviour
 
         timeProvider = GameObject.Find("AudioTimeProvider").GetComponent<AudioTimeProvider>();
 
-        firework = GameObject.Find("Firework");
+        firework = GameObject.Find("Firework_effect");
         fireworkEffect = firework.GetComponent<Animator>();
 
         for (int i = 0; i < 6; i++)

@@ -32,7 +32,6 @@ public class GameMainManager : MonoBehaviour
     [Space(10)]
     [Header("Settings")]
     public float startTime = 0f;
-    public long startAt;
     public float audioSpeed = 1f;
     public float offset;
     
@@ -48,17 +47,25 @@ public class GameMainManager : MonoBehaviour
 
     void Start()
     {
-        /*id = SongInformation.getChartID();
-        chartpath = ApiAccess.ROOT + "Maidata/" + id;
-        audiopath = ApiAccess.ROOT + "Track/" + id;
-        bgpath = ApiAccess.ROOT + "ImageFull/" + id;
-        WebLoad();*/
+        StartCoroutine(DebugStart());
+    }
+
+    IEnumerator DebugStart()
+    {
+        Application.targetFrameRate = -1;
+        var apiroot = "https://majdata.net/api1/api/";
+        var id = 1;
+        var chartpath = apiroot + "Maidata/" + id;
+        var audiopath = apiroot + "Track/" + id;
+        var bgpath = apiroot + "ImageFull/" + id;
+        var videopath = apiroot + "Video/" + id;
+        yield return new WaitForSeconds(1f);
+        WebLoad(chartpath, bgpath, audiopath,videopath, 4);
     }
 
     // init loading & start playing method
     public void Play()
     {
-        startAt = System.DateTime.Now.Ticks;
         simailoader.noteSpeed = settings.noteSpeed;
         simailoader.touchSpeed = settings.touchSpeed;
         //SimaiProcess.Serialize(SimaiProcess.fumens[menuManager.level]);
@@ -70,6 +77,8 @@ public class GameMainManager : MonoBehaviour
         inited = true;
         // set btn states
         menuManager.SetPlayMode();
+        bgManager.videoPlayer.time = startTime - offset;
+        bgManager.videoPlayer.Play();
     }
 
     // callback of play/pause button
@@ -84,9 +93,11 @@ public class GameMainManager : MonoBehaviour
             startTime = timeProvider.AudioTime;
             timeProvider.playStartTime = startTime;
             timeProvider.Pause();
+            bgManager.videoPlayer.Pause();
             menuManager.SetPauseMode();
         } else {
             timeProvider.Resume();
+            bgManager.videoPlayer.Play();
             menuManager.SetPlayMode();
         }
     }
@@ -108,12 +119,20 @@ public class GameMainManager : MonoBehaviour
         objectCounter.Reset();
         // set btn states
         menuManager.SetReadyMode();
+        bgManager.videoPlayer.Stop();
     }
 
-    public void WebLoad(string chartpath, string bgpath, string audiopath, int level)
+    public void WebLoad(string chartpath, string bgpath, string audiopath,string videopath, int level)
     {
         OnStopButtonClick();
+        timeProvider.AudioTime = 0f;
+        timeProvider.playStartTime = 0f;
         menuManager.SetInitMode();
+        if(videopath != null)
+        {
+            bgManager.videoPlayer.url = videopath;
+            bgManager.videoPlayer.Prepare();
+        }
         status = 0;
         //载入各种资源，完成后准备菜单
         void checkReady()
