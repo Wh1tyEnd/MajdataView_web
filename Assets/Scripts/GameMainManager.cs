@@ -128,6 +128,7 @@ public class GameMainManager : MonoBehaviour
 
     public void WebLoad(string chartpath, string bgpath, string audiopath,string videopath, int level)
     {
+        StopAllCoroutines();
         OnStopButtonClick();
         timeProvider.AudioTime = 0f;
         timeProvider.playStartTime = 0f;
@@ -165,11 +166,18 @@ public class GameMainManager : MonoBehaviour
                     return;
                 }
                 else {
-                    bgManager.UpdateVideoRatio();
                     menuManager.SetReadyMode(); 
                 }
             }
         }
+
+        Action videoCallback = () =>
+        {
+            status += 1;
+            checkReady();
+        };
+        StartCoroutine(WaitVideoPrepare(videoCallback));
+
         // open maidata.txt
         Action successCallback = () =>
         {
@@ -199,12 +207,7 @@ public class GameMainManager : MonoBehaviour
         };
 
         StartCoroutine(WebLoader.LoadBGFromWeb(bgpath, bgCallback));
-        Action videoCallback = () =>
-        {
-            status += 1;
-            checkReady();
-        };
-        StartCoroutine(WaitVideoPrepare(videoCallback));
+        
     }
 
     IEnumerator WaitVideoPrepare(Action callback)
@@ -217,10 +220,21 @@ public class GameMainManager : MonoBehaviour
             if(Time.time - startTime  > 2f)
             {
                 Debug.Log("No video for this song? maybe because it does not throw, FUCK YOU UNITY");
-                break;
+                callback.Invoke();
+                StartCoroutine(SeeIfitisDoneLater());
+                yield break;
             }
         }
+        bgManager.UpdateVideoRatio();
         callback.Invoke();
+    }
+    IEnumerator SeeIfitisDoneLater()
+    {
+        while (!bgManager.videoPlayer.isPrepared)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        bgManager.UpdateVideoRatio();
     }
 
     public void OnSpeedDropDownClick(int value)
