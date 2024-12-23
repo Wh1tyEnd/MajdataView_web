@@ -47,17 +47,18 @@ public class HandleJSMessages : MonoBehaviour
     {
         Application.targetFrameRate = -1;
         var parts = message.Split('\n');//type\ncontent
-        var type = parts[0];
-        var apiroot = parts[1];
-        var id = parts[2];
-        var level = parts[3];
+        var maidata = parts[0];
+        var track = parts[1];
+        var bg = parts[2];
+        var mv = parts[3];
+        var level = parts[4];
         Debug.Log("level:"+level);
         gameMainManager = GameObject.Find("GameMain").GetComponent<GameMainManager>();
 
-        gameMainManager.WebLoad(apiroot + "/Maidata/" + id,
-            apiroot + "/ImageFull/" + id,
-            apiroot + "/Track/" + id,
-            apiroot + "/Video/" + id,
+        gameMainManager.WebLoad(maidata,
+            bg,
+            track,
+            mv,
             int.Parse(level[2].ToString()));
         
     }
