@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -6,6 +7,10 @@ using UnityEngine;
 public class HandleJSMessages : MonoBehaviour
 {
     public GameMainManager gameMainManager;
+
+    [DllImport("__Internal")]
+    private static extern void UnityLoaded();
+
     private void Awake()
     {
         Application.targetFrameRate = 5;
@@ -14,7 +19,16 @@ public class HandleJSMessages : MonoBehaviour
             WebGLInput.captureAllKeyboardInput = false;
             Debug.Log("HandleJSMessages Activated");//look for this message in the browser to ensure its working, delete before production
             DontDestroyOnLoad(this);
+            try
+            {
+                UnityLoaded();
+            }
+            catch (Exception e)
+            {
+                Debug.Log("UnityLoaded() failed: " + e.Message);
+            }
         }
+
     }
 
     public void Start()

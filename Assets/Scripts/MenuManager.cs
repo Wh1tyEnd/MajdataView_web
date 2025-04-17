@@ -22,6 +22,7 @@ public class MenuManager : MonoBehaviour
     void Start()
     {
         SetInitMode();
+        OverlayMenu.SetActive(false);
     }
 
     public void SetInitMode()

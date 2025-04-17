@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
 using TMPro;
+using System.Runtime.InteropServices;
+using Newtonsoft.Json.Linq;
+using System.Xml.Linq;
+using System;
 
 public static class ExtensionFindMethod
 {
@@ -84,9 +88,17 @@ public class SettingsManager : MonoBehaviour
         return GetSlider("BGCover").value / 10;
     }}
     
-    public bool combo {get {
-        return transform.FindObject("Combo").GetComponent<Toggle>().isOn;
-    }}
+    public bool combo
+    {
+        get
+        {
+            return transform.FindObject("Combo").GetComponent<Toggle>().isOn;
+        }
+        set 
+        { 
+            transform.FindObject("Combo").GetComponent<Toggle>().isOn = value; 
+        }
+    }
     
     public void UpdateVolume()
     {
@@ -98,15 +110,11 @@ public class SettingsManager : MonoBehaviour
         }
     }
 
-    void Start()
+    void Awake()
     {
-        foreach(string slider in sliders)
-        {
-            GetSlider(slider).onValueChanged.AddListener (delegate {UpdateSliders();});
-        }
         Transform audioRoot = transform.FindObject("Content");
         UIGroup VolumeGroup = transform.FindObject("Volume").GetComponent<UIGroup>();
-        foreach(string channel in channels)
+        foreach (string channel in channels)
         {
             GameObject volumeItem = Instantiate(volumePrefab);
             volumeItem.transform.SetParent(audioRoot);
@@ -118,12 +126,83 @@ public class SettingsManager : MonoBehaviour
             GameObject volumeDisplay = volumeItem.transform.FindObject("VolumeDisplay").gameObject;
             volumeDisplay.name = channel + "Display";
             float vol;
-            bool result =  masterMixer.GetFloat(channel, out vol);
+            bool result = masterMixer.GetFloat(channel, out vol);
             volumeSlider.GetComponent<Slider>().value = vol;
-            volumeSlider.GetComponent<Slider>().onValueChanged.AddListener (delegate {UpdateVolume();});
             volumeDisplay.GetComponent<TMP_Text>().text = vol.ToString() + "dB";
             VolumeGroup.childComponents.Add(volumeItem);
         }
         VolumeGroup.Apply();
+
+        try
+        {
+            string values = GetLocalStorge("MajdataSettings");
+            if (values != null)
+            {
+                SetSliderValues(values);
+                UpdateSliders();
+                UpdateVolume();
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log("GetLocalStorge() failed: " + e.Message);
+        }
+
+        foreach (string slider in sliders)
+        {
+            GetSlider(slider).onValueChanged.AddListener(delegate { UpdateSliders(); });
+            GetSlider(slider).onValueChanged.AddListener(delegate { SaveSliderSettings(); });
+        }
+        foreach (string channel in channels)
+        {
+            GetSlider(channel).onValueChanged.AddListener(delegate { UpdateVolume(); });
+            GetSlider(channel).onValueChanged.AddListener(delegate { SaveSliderSettings(); });
+        }
     }
+    [DllImport("__Internal")]
+    private static extern void SetLocalStorge(string name, string value);
+    [DllImport("__Internal")]
+    private static extern string GetLocalStorge(string name);
+
+    void SaveSliderSettings()
+    {
+        string values = GetSliderValues();
+        try
+        {
+            SetLocalStorge("MajdataSettings", values);
+        }
+        catch (Exception e)
+        {
+            Debug.Log("SetLocalStorge() failed: " + e.Message);
+        }
+    }
+
+    string GetSliderValues()
+    {
+        string values = "";
+        foreach (string slider in sliders)
+        {
+            values += GetSlider(slider).value.ToString() + ",";
+        }
+        foreach (string channel in channels)
+        {
+            values += GetSlider(channel).value.ToString() + ",";
+        }
+        values += combo ? "1" : "0";
+        return values;
+    }
+
+    void SetSliderValues(string values)
+    {
+        string[] valueArray = values.Split(',');
+        for (int i = 0; i < sliders.Count; i++)
+        {
+            GetSlider(sliders[i]).value = float.Parse(valueArray[i]);
+        }
+        for (int i = 0; i < channels.Count; i++)
+        {
+            GetSlider(channels[i]).value = float.Parse(valueArray[i + sliders.Count]);
+        }
+        combo = valueArray[sliders.Count + channels.Count] == "1" ? true : false;
+    }   
 }
