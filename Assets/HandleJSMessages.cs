@@ -40,16 +40,16 @@ public class HandleJSMessages : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         Application.targetFrameRate = -1;
-        var apiroot = "https://majdata.net/api1/api";
-        var id = "32";
+        var apiroot = "https://majdata.net/api3/api/maichart/";
+        var id = "bb18c48b-2f74-49f3-808c-fef6e0b694c2";
         var level = "lv4";
         Debug.Log("level:" + level);
         gameMainManager = GameObject.Find("GameMain").GetComponent<GameMainManager>();
 
-        gameMainManager.WebLoad(apiroot + "/Maidata/" + id,
-            apiroot + "/ImageFull/" + id,
-            apiroot + "/Track/" + id,
-            apiroot + "/Video/" + id,
+        gameMainManager.WebLoad(apiroot + id + "/chart" ,
+            apiroot + id +  "/image?fullImage=true",
+            apiroot + id + "/Track",
+            apiroot + id + "/Video",
             int.Parse(level[2].ToString()));
     }
 

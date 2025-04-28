@@ -101,7 +101,13 @@ public class GameMainManager : MonoBehaviour
             menuManager.SetPauseMode();
         } else {
             timeProvider.Resume();
-            bgManager.videoPlayer.Play();
+            var vtime = startTime - offset;
+            if (vtime == 0)
+            {
+                bgManager.videoPlayer.playbackSpeed = audioSpeed;
+                bgManager.videoPlayer.Play();
+            }
+            //bgManager.videoPlayer.Play();
             menuManager.SetPlayMode();
         }
     }
