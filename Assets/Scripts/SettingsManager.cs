@@ -158,6 +158,7 @@ public class SettingsManager : MonoBehaviour
             GetSlider(channel).onValueChanged.AddListener(delegate { UpdateVolume(); });
             GetSlider(channel).onValueChanged.AddListener(delegate { SaveSliderSettings(); });
         }
+        transform.FindObject("Combo").GetComponent<Toggle>().onValueChanged.AddListener(delegate { SaveSliderSettings(); });
     }
     [DllImport("__Internal")]
     private static extern void SetLocalStorge(string name, string value);

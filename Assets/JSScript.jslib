@@ -3,7 +3,9 @@ mergeInto(LibraryManager.library,
 	UnityLoaded: function () {
 		console.log("Handle JS Message Ready")
     	if(window.onUnityLoaded !== undefined)
-		window.onUnityLoaded();
+			window.onUnityLoaded()
+		else
+			console.log("window.onUnityLoaded is undefined")
   	},
 	SetLocalStorge: function(name, value) {
 		localStorage.setItem(UTF8ToString(name), UTF8ToString(value));
