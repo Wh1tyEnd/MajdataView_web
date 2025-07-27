@@ -42,27 +42,6 @@ public class GameMainManager : MonoBehaviour
     private bool inited = false;
     private int status = 0;
 
-
-
-
-    void Start()
-    {
-        //StartCoroutine(DebugStart());
-    }
-
-    IEnumerator DebugStart()
-    {
-        Application.targetFrameRate = -1;
-        var apiroot = "https://majdata.net/api1/api/";
-        var id = 1;
-        var chartpath = apiroot + "Maidata/" + id;
-        var audiopath = apiroot + "Track/" + id;
-        var bgpath = apiroot + "ImageFull/" + id;
-        var videopath = apiroot + "Video/" + id;
-        yield return new WaitForSeconds(1f);
-        WebLoad(chartpath, bgpath, audiopath,videopath, 4);
-    }
-
     // init loading & start playing method
     public void Play()
     {
