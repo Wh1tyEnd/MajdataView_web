@@ -51,7 +51,7 @@ public class SimaiDataLoader : MonoBehaviour
         }
         else
         {
-            if (!SimaiProcess.ReadDataRaw(www.downloadHandler.text.Split((Environment.NewLine))))
+            if (!SimaiProcess.ReadDataRaw(www.downloadHandler.text.Split('\n')))
             {
                 Debug.LogError("Error Loading Chart.");
             }
@@ -140,6 +140,11 @@ public class SimaiDataLoader : MonoBehaviour
                         NDCompo.lastFor = (float)note.holdTime;
                         NDCompo.speed = touchSpeed * timing.HSpeed;
                         NDCompo.isFirework = note.isHanabi;
+                        NDCompo.areaPosition = note.touchArea;
+                        NDCompo.startPosition = note.startPosition;
+                        NDCompo.TouchPointEachSprite = customSkin.TouchPoint_Each;
+
+                        if (timing.noteList.Count > 1) NDCompo.isEach = true;
 
                         Array.Copy(customSkin.TouchHold, NDCompo.TouchHoldSprite, 5);
                         NDCompo.TouchPointSprite = customSkin.TouchPoint;
