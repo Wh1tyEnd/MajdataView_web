@@ -157,9 +157,8 @@ public class GameMainManager : MonoBehaviour
             videoPlayer.time = 0d;
             bgManager.SetIdleVideoFrameVisible(true, reason + ":ResetToFirstFrame");
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            Debug.LogError("[MJV][Stop] SafeStopVideoPlayer exception: " + e);
         }
     }
 
@@ -195,7 +194,6 @@ public class GameMainManager : MonoBehaviour
                 string fumens = SimaiProcess.fumens[level];
                 if (fumens == null)
                 {
-                    Debug.Log("Null level!");
                     menuManager.DisablePlay();
                     return;
                 }
@@ -206,7 +204,6 @@ public class GameMainManager : MonoBehaviour
                 }
                 if (SimaiProcess.notelist.Count <= 0)
                 {
-                    Debug.Log("Empty level!");
                     menuManager.DisablePlay();
                     return;
                 }
@@ -271,7 +268,6 @@ public class GameMainManager : MonoBehaviour
             yield return new WaitForEndOfFrame();
             if (Time.time - prepareStartTime > 2f)
             {
-                Debug.LogWarning("[MJV][Video] prepare timeout");
                 bgManager.UseStaticBackground("PrepareTimeout");
                 callback.Invoke();
                 StartCoroutine(SeeIfitisDoneLater());
@@ -296,9 +292,8 @@ public class GameMainManager : MonoBehaviour
             bgManager.videoPlayer.time = 0d;
             bgManager.videoPlayer.Play();
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            Debug.LogError("[MJV][FirstFrame] Play exception: " + e);
             yield break;
         }
 
@@ -311,9 +306,8 @@ public class GameMainManager : MonoBehaviour
             bgManager.videoPlayer.time = 0d;
             bgManager.SetIdleVideoFrameVisible(true, "ShowPreparedVideoFirstFrame");
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            Debug.LogError("[MJV][FirstFrame] Pause/reset exception: " + e);
         }
     }
 
@@ -373,10 +367,9 @@ public class GameMainManager : MonoBehaviour
             bgManager.SetIdleVideoFrameVisible(true, reason + ":SeekStart");
             player.time = videoTime;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             player.seekCompleted -= OnSeekCompleted;
-            Debug.LogError("[MJV][VideoSeek] request exception reason=" + reason + " error=" + e);
             yield break;
         }
 
