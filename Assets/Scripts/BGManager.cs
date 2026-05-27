@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +17,9 @@ public class BGManager : MonoBehaviour
     public GameObject videoTarget;
     public bool isAnyErr = false;
 
+    private bool showIdleVideoFrame = false;
+    private bool lastHideStaticBackground = false;
+
     void Start()
     {
         spriteRender = GetComponent<SpriteRenderer>();
@@ -27,8 +30,21 @@ public class BGManager : MonoBehaviour
 
     private void VideoPlayer_errorReceived(VideoPlayer source, string message)
     {
-        Debug.Log("LoadVideoFailed");
+        Debug.LogWarning("[MJV][BGManager] LoadVideoFailed: " + message);
+        UseStaticBackground("VideoPlayer.errorReceived");
+    }
+
+    public void UseStaticBackground(string reason)
+    {
         isAnyErr = true;
+        showIdleVideoFrame = false;
+
+        if (spriteRender != null)
+        {
+            spriteRender.forceRenderingOff = false;
+        }
+
+        Debug.LogWarning("[MJV][BGManager] use static background reason=" + reason);
     }
 
     public void SetNewSpriteForVideo()
@@ -37,23 +53,70 @@ public class BGManager : MonoBehaviour
                 Sprite.Create(new Texture2D(480, 480), new Rect(0, 0, 480, 480), new Vector2(0.5f, 0.5f));
     }
 
+    public void SetIdleVideoFrameVisible(bool visible, string reason)
+    {
+        showIdleVideoFrame = visible && !isAnyErr;
+
+        Debug.Log(
+            "[MJV][BGManager] SetIdleVideoFrameVisible visible=" +
+            showIdleVideoFrame +
+            " requested=" +
+            visible +
+            " reason=" +
+            reason +
+            " isAnyErr=" +
+            isAnyErr
+        );
+    }
+
     public void UpdateVideoRatio()
     {
+        if (videoPlayer == null ||
+            videoTarget == null ||
+            videoPlayer.width <= 0 ||
+            videoPlayer.height <= 0)
+        {
+            Debug.LogWarning("[MJV][BGManager] UpdateVideoRatio skipped: invalid video size");
+            return;
+        }
+
         var scale = videoPlayer.height / (float)videoPlayer.width;
         videoTarget.transform.localScale = new Vector3(2.25f, 2.25f * scale);
     }
 
     public void Update()
     {
-        if(!isAnyErr) {
-            if(!videoPlayer.isPaused)
-                spriteRender.forceRenderingOff = videoPlayer.isPlaying;
-        }
-        else
+        var hideStaticBackground = false;
+
+        if (!isAnyErr && videoPlayer != null)
         {
-            spriteRender.forceRenderingOff = false;
+            hideStaticBackground = videoPlayer.isPlaying || showIdleVideoFrame;
         }
-        
-        BackgroundCover.color = new UnityEngine.Color(0f, 0f, 0f, settings.bgCover);
+
+        if (spriteRender != null)
+        {
+            spriteRender.forceRenderingOff = hideStaticBackground;
+        }
+
+        if (hideStaticBackground != lastHideStaticBackground)
+        {
+            lastHideStaticBackground = hideStaticBackground;
+
+            Debug.Log(
+                "[MJV][BGManager] staticBackgroundHidden=" +
+                hideStaticBackground +
+                " videoPlaying=" +
+                (videoPlayer != null && videoPlayer.isPlaying) +
+                " videoPrepared=" +
+                (videoPlayer != null && videoPlayer.isPrepared) +
+                " idleFrame=" +
+                showIdleVideoFrame
+            );
+        }
+
+        if (BackgroundCover != null && settings != null)
+        {
+            BackgroundCover.color = new UnityEngine.Color(0f, 0f, 0f, settings.bgCover);
+        }
     }
 }
