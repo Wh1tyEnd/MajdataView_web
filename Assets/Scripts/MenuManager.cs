@@ -23,6 +23,10 @@ public class MenuManager : MonoBehaviour
     {
         SetInitMode();
         OverlayMenu.SetActive(false);
+
+#if !UNITY_EDITOR && UNITY_WEBGL
+        HideTransportControlsForWeb();
+#endif
     }
 
     public void SetInitMode()
@@ -73,7 +77,6 @@ public class MenuManager : MonoBehaviour
         speedSelector.interactable = true;
     }
 
-
     public void ShowWindow(string fumen)
     {
         OverlayWindow.transform.Find("FumenView").GetComponent<maihighlight>().UpdateHighlight(fumen);
@@ -86,5 +89,12 @@ public class MenuManager : MonoBehaviour
             OverlayMenu.SetActive(false);
         else
             OverlayMenu.SetActive(true);
+    }
+
+    private void HideTransportControlsForWeb()
+    {
+        if (PlayPause != null) PlayPause.gameObject.SetActive(false);
+        if (Stop != null) Stop.gameObject.SetActive(false);
+        if (speedSelector != null) speedSelector.gameObject.SetActive(false);
     }
 }
