@@ -194,6 +194,7 @@ public class GameMainManager : MonoBehaviour
                 string fumens = SimaiProcess.fumens[level];
                 if (fumens == null)
                 {
+                    Debug.Log("Null level!");
                     menuManager.DisablePlay();
                     return;
                 }
@@ -204,6 +205,7 @@ public class GameMainManager : MonoBehaviour
                 }
                 if (SimaiProcess.notelist.Count <= 0)
                 {
+                    Debug.Log("Empty level!");
                     menuManager.DisablePlay();
                     return;
                 }
