@@ -30,6 +30,7 @@ public class BGManager : MonoBehaviour
 
     private void VideoPlayer_errorReceived(VideoPlayer source, string message)
     {
+        Debug.Log("LoadVideoFailed");
         UseStaticBackground("VideoPlayer.errorReceived");
     }
 
