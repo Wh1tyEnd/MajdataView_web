@@ -11,15 +11,20 @@ public class CustomSkin : MonoBehaviour
 
     public Sprite Tap;
     public Sprite Tap_Each;
+    public Sprite Tap_Mine;
+    public Sprite Tap_Mine_Break;
     public Sprite Tap_Break;
     public Sprite Tap_Ex;
 
     public Sprite Slide;
+    public Sprite Slide_Mine;
+    public Sprite Slide_Break_Mine;
     public Sprite Slide_Each;
     public Sprite Slide_Break;
     public Sprite[] Wifi = new Sprite[11];
     public Sprite[] Wifi_Each = new Sprite[11];
     public Sprite[] Wifi_Break = new Sprite[11];
+    public Sprite[] Wifi_Mine = new Sprite[11];
 
     public Sprite Star;
     public Sprite Star_Double;
@@ -27,6 +32,10 @@ public class CustomSkin : MonoBehaviour
     public Sprite Star_Each_Double;
     public Sprite Star_Break;
     public Sprite Star_Break_Double;
+    public Sprite Star_Mine;
+    public Sprite Star_Mine_Double;
+    public Sprite Star_Break_Mine;
+    public Sprite Star_Break_Mine_Double;
     public Sprite Star_Ex;
     public Sprite Star_Ex_Double;
 
@@ -34,6 +43,8 @@ public class CustomSkin : MonoBehaviour
     public Sprite Hold_Each;
     public Sprite Hold_Ex;
     public Sprite Hold_Break;
+    public Sprite Hold_Mine;
+    public Sprite Hold_Break_Mine;
 
     public Sprite[] Just = new Sprite[6];
     public Sprite JudgeText_Normal;
@@ -41,13 +52,25 @@ public class CustomSkin : MonoBehaviour
 
     public Sprite Touch;
     public Sprite Touch_Each;
+    public Sprite Touch_Break;
+    public Sprite Touch_Mine;
+    public Sprite Touch_Break_Mine;
     public Sprite TouchPoint;
     public Sprite TouchPoint_Each;
+    public Sprite TouchPoint_Mine;
+    public Sprite TouchPoint_Break;
+    public Sprite TouchPoint_Break_Mine;
     public Sprite TouchJust;
     public Sprite[] TouchBorder = new Sprite[2];
     public Sprite[] TouchBorder_Each = new Sprite[2];
+    public Sprite[] TouchBorder_Mine = new Sprite[2];
+    public Sprite[] TouchBorder_Break = new Sprite[2];
+    public Sprite[] TouchBorder_Break_Mine = new Sprite[2];
 
     public Sprite[] TouchHold = new Sprite[5];
+    public Sprite[] TouchHold_Mine = new Sprite[5];
+    public Sprite[] TouchHold_Break = new Sprite[5];
+    public Sprite[] TouchHold_Break_Mine = new Sprite[5];
 
     public Texture2D test;
 

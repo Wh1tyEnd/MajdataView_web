@@ -41,14 +41,14 @@ public class HandleJSMessages : MonoBehaviour
         yield return new WaitForSeconds(1);
         Application.targetFrameRate = -1;
         var apiroot = "https://majdata.net/api3/api/maichart/";
-        var id = "2d4599de-6cc2-4572-ae84-78a14767614e";
+        var id = "f30fd482-b2e1-418d-a94e-d174d4e00e6f";
         gameMainManager = GameObject.Find("GameMain").GetComponent<GameMainManager>();
 
-        gameMainManager.WebLoad(apiroot + id + "/chart" ,
+        gameMainManager.WebLoad("file://D:/_Game/maimai∆◊/»À≈º∞Ÿ∫œ/maidata.txt",
             apiroot + id +  "/image?fullImage=true",
             apiroot + id + "/Track",
             apiroot + id + "/Video",
-            3);
+            0);
     }
 #endif
 

@@ -15,19 +15,25 @@ public class StarDrop : MonoBehaviour
     public bool isDouble = false;
     public bool isEX = false;
     public bool isNoHead = false;
+    public bool isMine = false;
 
     public Sprite tapSpr;
     public Sprite eachSpr;
     public Sprite breakSpr;
     public Sprite exSpr;
+    public Sprite mineSpr;
+    public Sprite mineBreakSpr;
 
     public Sprite tapSpr_Double;
     public Sprite eachSpr_Double;
     public Sprite breakSpr_Double;
     public Sprite exSpr_Double;
+    public Sprite mineSpr_Double;
+    public Sprite mineBreakSpr_Double;
 
     public Sprite eachLine;
     public Sprite breakLine;
+    public Sprite mineLine;
 
     public RuntimeAnimatorController BreakShine;
 
@@ -81,7 +87,23 @@ public class StarDrop : MonoBehaviour
                     exSpriteRender.color = exEffectEach;
                 }
             }
-            if (isBreak)
+            if (isMine)
+            {
+                lineSpriteRender.sprite = mineLine;
+                if (isBreak)
+                {
+                    spriteRenderer.sprite = mineBreakSpr_Double;
+                    Animator anim = gameObject.AddComponent<Animator>();  // break tap闪烁
+                    anim.runtimeAnimatorController = BreakShine;
+                    anim.enabled = false;
+                    animator = anim;
+                }
+                else
+                {
+                    spriteRenderer.sprite = mineSpr_Double;
+                }
+            }
+            else if (isBreak)
             {
                 lineSpriteRender.sprite = breakLine;
                 spriteRenderer.sprite = breakSpr_Double;
@@ -112,7 +134,23 @@ public class StarDrop : MonoBehaviour
                     exSpriteRender.color = exEffectEach;
                 }
             }
-            if (isBreak)
+            if (isMine)
+            {
+                lineSpriteRender.sprite = mineLine;
+                if (isBreak)
+                {
+                    spriteRenderer.sprite = mineBreakSpr;
+                    Animator anim = gameObject.AddComponent<Animator>();  // break tap闪烁
+                    anim.runtimeAnimatorController = BreakShine;
+                    anim.enabled = false;
+                    animator = anim;
+                }
+                else
+                {
+                    spriteRenderer.sprite = mineSpr;
+                }
+            }
+            else if (isBreak)
             {
                 lineSpriteRender.sprite = breakLine;
                 spriteRenderer.sprite = breakSpr;

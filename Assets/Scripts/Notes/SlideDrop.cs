@@ -12,12 +12,15 @@ public class SlideDrop : MonoBehaviour
     public Sprite spriteNormal;
     public Sprite spriteEach;
     public Sprite spriteBreak;
+    public Sprite spriteMine;
+    public Sprite spriteMineBreak;
     public RuntimeAnimatorController slideShine;
 
     public bool isMirror;
     public bool isJustR;
     public bool isEach;
     public bool isBreak;
+    public bool isMine;
     public bool isGroupPart;
     public bool isGroupPartEnd;
     public float time;
@@ -96,16 +99,24 @@ public class SlideDrop : MonoBehaviour
             sr.color = new Color(1f, 1f, 1f, 0f);
             sr.sortingOrder += sortIndex;
             sr.sortingLayerName = "Slide";
+
+            if (isEach) sr.sprite = spriteEach;
+            else sr.sprite = spriteNormal;
+
             if (isBreak)
             {
-                sr.sprite = spriteBreak;
                 Animator anim = gm.AddComponent<Animator>();
                 anim.runtimeAnimatorController = slideShine;
                 anim.enabled = false;
                 animators.Add(anim);
             }
-            else if (isEach) sr.sprite = spriteEach;
-            else sr.sprite = spriteNormal;
+
+            if (isMine && isBreak) sr.sprite = spriteMineBreak;
+            else if (isMine) sr.sprite = spriteMine;
+            else if (isBreak)
+            {
+                sr.sprite = spriteBreak;
+            }
         }
     }
 

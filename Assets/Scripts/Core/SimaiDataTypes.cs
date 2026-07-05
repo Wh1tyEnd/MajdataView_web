@@ -200,6 +200,39 @@ public class SimaiTimingPoint
             }
             noteText = noteText.Replace("b", "");
         }
+        //mine, copy b
+        if (noteText.Contains('m'))
+        {
+            if (simaiNote.noteType == SimaiNoteType.Slide)
+            {
+                int startIndex = 0;
+                while ((startIndex = noteText.IndexOf('m', startIndex)) != -1)
+                {
+                    if (startIndex < noteText.Length - 1)
+                    {
+                        if (noteText[startIndex + 1] == '[')
+                        {
+                            simaiNote.isSlideMine = true;
+                        }
+                        else
+                        {
+                            simaiNote.isMine = true;
+                        }
+                    }
+                    else
+                    {
+                        simaiNote.isSlideMine = true;
+                    }
+                    startIndex++;
+                }
+            }
+            else
+            {
+                // 除此之外的Break就无所谓了
+                simaiNote.isMine = true;
+            }
+            noteText = noteText.Replace("m", "");
+        }
         //EX
         if (noteText.Contains('x'))
         {
@@ -342,6 +375,8 @@ public enum SimaiNoteType
 public class SimaiNote
 {
     public SimaiNoteType noteType;
+    public bool isMine = false;
+    public bool isSlideMine = false;
     public bool isBreak = false;
     public bool isSlideBreak = false;
     public bool isHanabi = false;

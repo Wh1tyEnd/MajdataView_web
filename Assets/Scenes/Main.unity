@@ -2847,6 +2847,8 @@ MonoBehaviour:
   eachLine: {fileID: 278292873598720211, guid: 54e5879f47df2a248b91a3e19dfe8599, type: 3}
   starLine: {fileID: 7599635926637845735, guid: 170f7f7a95689ea479fc7270d6ebf074,
     type: 3}
+  mineLine: {fileID: 8134463029818261665, guid: 3cc0959d88c9154409daf03fc0873df6,
+    type: 3}
   notes: {fileID: 327139454}
   star_slidePrefab: {fileID: 3082733108601366817, guid: 42156a3b3ae4d054da74641cd739534f,
     type: 3}
@@ -12055,9 +12057,13 @@ MonoBehaviour:
   loadFromDisk: 0
   Tap: {fileID: 21300000, guid: 3eecbe828de3e6f48a5f0476c9413345, type: 3}
   Tap_Each: {fileID: 21300000, guid: 215fb5c93c5d7d445b2d6c6e3d946433, type: 3}
+  Tap_Mine: {fileID: 21300000, guid: 91584aa8fb4b4ce469be96485f0ab7cf, type: 3}
+  Tap_Mine_Break: {fileID: 21300000, guid: 8fc7d5ca0fc8cc14bafc7a333d29306c, type: 3}
   Tap_Break: {fileID: 21300000, guid: 0dec58558f152864d87e506c9bda6cb4, type: 3}
   Tap_Ex: {fileID: 21300000, guid: 1887c57419e15354cbab6fcc35b3ebad, type: 3}
   Slide: {fileID: 21300000, guid: 8576ec838da5f784e866901901ed374f, type: 3}
+  Slide_Mine: {fileID: 21300000, guid: 1eee42e0e7711d54c8964bb49362c309, type: 3}
+  Slide_Break_Mine: {fileID: 21300000, guid: 703b75c7d38de674793ff02f665e68a2, type: 3}
   Slide_Each: {fileID: 21300000, guid: caf8d9e4eb922c34292037e17ca94256, type: 3}
   Slide_Break: {fileID: 21300000, guid: ecc59442c0929db4e81ec6e5093a0951, type: 3}
   Wifi:
@@ -12096,18 +12102,37 @@ MonoBehaviour:
   - {fileID: -4777771625403694506, guid: 79612319b62e28541879c9b8cb425989, type: 3}
   - {fileID: 1725681396707737570, guid: 79612319b62e28541879c9b8cb425989, type: 3}
   - {fileID: -2499823243339350701, guid: 79612319b62e28541879c9b8cb425989, type: 3}
+  Wifi_Mine:
+  - {fileID: -2104979366251557822, guid: 6d87ba0d7e64af2488db9c0eeecb87d0, type: 3}
+  - {fileID: -5508730858329978074, guid: 6d87ba0d7e64af2488db9c0eeecb87d0, type: 3}
+  - {fileID: 1660827000066962834, guid: 6d87ba0d7e64af2488db9c0eeecb87d0, type: 3}
+  - {fileID: -3035267430650131031, guid: 6d87ba0d7e64af2488db9c0eeecb87d0, type: 3}
+  - {fileID: -439320201241764418, guid: 6d87ba0d7e64af2488db9c0eeecb87d0, type: 3}
+  - {fileID: 5960795151959469272, guid: 6d87ba0d7e64af2488db9c0eeecb87d0, type: 3}
+  - {fileID: 6048690973988703305, guid: 6d87ba0d7e64af2488db9c0eeecb87d0, type: 3}
+  - {fileID: -3748293275541971110, guid: 6d87ba0d7e64af2488db9c0eeecb87d0, type: 3}
+  - {fileID: -3300150129828961110, guid: 6d87ba0d7e64af2488db9c0eeecb87d0, type: 3}
+  - {fileID: 5821571336286938200, guid: 6d87ba0d7e64af2488db9c0eeecb87d0, type: 3}
+  - {fileID: 4201695303700987197, guid: 6d87ba0d7e64af2488db9c0eeecb87d0, type: 3}
   Star: {fileID: 21300000, guid: 57e073b06f82de348ab42249bc7d1730, type: 3}
   Star_Double: {fileID: 21300000, guid: 1b63ab007d532694c920804b370d2bfd, type: 3}
   Star_Each: {fileID: 21300000, guid: deaae7262ad7bb049a82070013a7df12, type: 3}
   Star_Each_Double: {fileID: 21300000, guid: 2787268155f1f3044b7ea3aba39d7610, type: 3}
   Star_Break: {fileID: 21300000, guid: 71cf325d8fd600f4394779383fb653c7, type: 3}
   Star_Break_Double: {fileID: 21300000, guid: d54b0d199fd180349b391ace1f236b76, type: 3}
+  Star_Mine: {fileID: 21300000, guid: 9e9ec6794e660f243a596af70ed131a8, type: 3}
+  Star_Mine_Double: {fileID: 21300000, guid: d21abe43e8a4742469da8947f3062e51, type: 3}
+  Star_Break_Mine: {fileID: 21300000, guid: 516bf925bd46cfb49a955f2c85876f6d, type: 3}
+  Star_Break_Mine_Double: {fileID: 21300000, guid: 99fb375e3dea5f647bdea9bbaa7c245b,
+    type: 3}
   Star_Ex: {fileID: 21300000, guid: c8d6cacf8591ee044a77203a3aee8e52, type: 3}
   Star_Ex_Double: {fileID: 21300000, guid: 15f11c7c60eedd74ab3c187b0b4998f2, type: 3}
   Hold: {fileID: 21300000, guid: 3f98ca3ca2056c042a55edc5ff53fff7, type: 3}
   Hold_Each: {fileID: 21300000, guid: b05f24492bb55e44aaa491d5f0fb4766, type: 3}
   Hold_Ex: {fileID: 21300000, guid: 8f42c31ec3ee2af4aa2a2ee02ad021b0, type: 3}
   Hold_Break: {fileID: 21300000, guid: b29ddf775aed9e74eb8f4f199db379ef, type: 3}
+  Hold_Mine: {fileID: 21300000, guid: 94755620838ac5e40abc2d98293859fe, type: 3}
+  Hold_Break_Mine: {fileID: 21300000, guid: 911360f37b4388b458a03b291c3da8d4, type: 3}
   Just:
   - {fileID: 21300000, guid: d47221cd47c554d46a0fa34223b0a55b, type: 3}
   - {fileID: 21300000, guid: 014b40cc35e0bf74ea167c9cd6b4be0a, type: 3}
@@ -12119,8 +12144,15 @@ MonoBehaviour:
   JudgeText_Break: {fileID: 21300000, guid: c190fb744a4bc94429a7cbce66f9fa9b, type: 3}
   Touch: {fileID: 21300000, guid: 174b3ca7ae6e55e46a3fae719586a3d3, type: 3}
   Touch_Each: {fileID: 21300000, guid: f3974af5b544d2f459706acf1fa30d1e, type: 3}
+  Touch_Break: {fileID: 21300000, guid: 1ae1db333afddc94eb9aec09291413c1, type: 3}
+  Touch_Mine: {fileID: 21300000, guid: e289e8356124abd4c8978602aeee687d, type: 3}
+  Touch_Break_Mine: {fileID: 21300000, guid: 31178c231527ca444970ea5dde9b8ed6, type: 3}
   TouchPoint: {fileID: 21300000, guid: 56ada2b421cc3e94dbda75b53ed53951, type: 3}
   TouchPoint_Each: {fileID: 21300000, guid: dfb43f44e9c0dc7468a44b3e34935741, type: 3}
+  TouchPoint_Mine: {fileID: 0}
+  TouchPoint_Break: {fileID: 21300000, guid: 2e07025c13d23d5428700154149b203a, type: 3}
+  TouchPoint_Break_Mine: {fileID: 21300000, guid: 0cfe646aaff33b84db0badf9e9b2fe18,
+    type: 3}
   TouchJust: {fileID: 21300000, guid: cb213665cf941db40b660042d09213fc, type: 3}
   TouchBorder:
   - {fileID: 21300000, guid: 9da4e3c3ec86a344a992b1db286f7ed4, type: 3}
@@ -12128,12 +12160,39 @@ MonoBehaviour:
   TouchBorder_Each:
   - {fileID: 21300000, guid: 0b5398588c3ba044ab60b44ace6fc9af, type: 3}
   - {fileID: 21300000, guid: d29bb87fe754b494b983a1d5f604a28a, type: 3}
+  TouchBorder_Mine:
+  - {fileID: 21300000, guid: b039b13bd4a34b34595c08bd984795f0, type: 3}
+  - {fileID: 21300000, guid: e0c3f892adb64ca4686fbbbc2e01a91d, type: 3}
+  TouchBorder_Break:
+  - {fileID: 21300000, guid: b4fdb4124cda5f240b04876d097f5838, type: 3}
+  - {fileID: 21300000, guid: 165a6a7105c93b84e83cbf526bf16ef4, type: 3}
+  TouchBorder_Break_Mine:
+  - {fileID: 21300000, guid: f6267d17b37095945897095d9de1cde1, type: 3}
+  - {fileID: 21300000, guid: 40a1c7fe92dc9634fbbaeb6ad8afc67f, type: 3}
   TouchHold:
   - {fileID: 21300000, guid: 1e772999674a5ab43bef559b1e8ca798, type: 3}
   - {fileID: 21300000, guid: 964bfec600c4eb24c9ba2500ee1d263a, type: 3}
   - {fileID: 21300000, guid: 5e746a87a6eaa414d8c4b14e9d7f5296, type: 3}
   - {fileID: 21300000, guid: 276d97e4e78b505419c1f6707c075422, type: 3}
   - {fileID: 21300000, guid: 681871fcccbc55d459f5f087357e456c, type: 3}
+  TouchHold_Mine:
+  - {fileID: 21300000, guid: a7e23ab8f12013240b5583ca3bd7d79d, type: 3}
+  - {fileID: 21300000, guid: e381ae508ef32934c88617cb0af36b6a, type: 3}
+  - {fileID: 21300000, guid: 34cdc030ce6cc4a4aafb90e61f5671f7, type: 3}
+  - {fileID: 21300000, guid: 9fbc92d7ab25c9043b60931a8ac68e1d, type: 3}
+  - {fileID: 21300000, guid: 73b63ee6f85790e418f36b8c564b6bae, type: 3}
+  TouchHold_Break:
+  - {fileID: 21300000, guid: 276d97e4e78b505419c1f6707c075422, type: 3}
+  - {fileID: 21300000, guid: 5e746a87a6eaa414d8c4b14e9d7f5296, type: 3}
+  - {fileID: 21300000, guid: 964bfec600c4eb24c9ba2500ee1d263a, type: 3}
+  - {fileID: 21300000, guid: 1e772999674a5ab43bef559b1e8ca798, type: 3}
+  - {fileID: 21300000, guid: 681871fcccbc55d459f5f087357e456c, type: 3}
+  TouchHold_Break_Mine:
+  - {fileID: 21300000, guid: a7e23ab8f12013240b5583ca3bd7d79d, type: 3}
+  - {fileID: 21300000, guid: e381ae508ef32934c88617cb0af36b6a, type: 3}
+  - {fileID: 21300000, guid: 34cdc030ce6cc4a4aafb90e61f5671f7, type: 3}
+  - {fileID: 21300000, guid: 9fbc92d7ab25c9043b60931a8ac68e1d, type: 3}
+  - {fileID: 21300000, guid: 73b63ee6f85790e418f36b8c564b6bae, type: 3}
   test: {fileID: 0}
 --- !u!4 &1689023181
 Transform:

@@ -10,6 +10,8 @@ public class TouchHoldDrop : MonoBehaviour
     public float speed = 1;
     public bool isFirework;
     public bool isEach;
+    public bool isBreak;
+    public bool isMine;
 
     public GameObject tapEffect;
     public GameObject holdEffect;
@@ -20,8 +22,15 @@ public class TouchHoldDrop : MonoBehaviour
     Animator fireworkEffect;
 
     public Sprite[] TouchHoldSprite = new Sprite[5];
+    public Sprite[] TouchHoldBreakSprite = new Sprite[5];
+    public Sprite[] TouchHoldMineSprite = new Sprite[5];
+    public Sprite[] TouchHoldBreakMineSprite = new Sprite[5];
+
     public Sprite TouchPointSprite;
     public Sprite TouchPointEachSprite;
+    public Sprite TouchPointMineSprite;
+    public Sprite TouchPointBreakSprite;
+    public Sprite TouchPointBreakMineSprite;
 
     public GameObject[] fans;
     SpriteRenderer[] fansSprite = new SpriteRenderer[6];
@@ -59,7 +68,16 @@ public class TouchHoldDrop : MonoBehaviour
         {
             fansSprite[i].sprite = TouchHoldSprite[i];
         }
-        fansSprite[5].sprite = TouchHoldSprite[4];      // TouchHold Border
+
+        fansSprite[5].sprite = TouchHoldSprite[4];
+        fansSprite[5].sortingOrder = (int)areaPosition + startPosition - 100;
+        mask.isCustomRangeActive = true;
+        mask.frontSortingLayerID = fansSprite[5].sortingLayerID;
+        mask.frontSortingOrder = fansSprite[5].sortingOrder;
+        mask.backSortingLayerID = fansSprite[5].sortingLayerID;
+        mask.backSortingOrder = fansSprite[5].sortingOrder-1;
+
+
         if (isEach)
         {
             fansSprite[4].sprite = TouchPointEachSprite;
@@ -67,7 +85,34 @@ public class TouchHoldDrop : MonoBehaviour
         else { 
             fansSprite[4].sprite = TouchPointSprite; 
         }
-            
+
+        if (isMine && isBreak)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                fansSprite[i].sprite = TouchHoldBreakMineSprite[i];
+            }
+            fansSprite[4].sprite = TouchPointBreakMineSprite;
+            fansSprite[5].sprite = TouchHoldBreakMineSprite[4];
+        }
+        else if (isMine)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                fansSprite[i].sprite = TouchHoldMineSprite[i];
+            }
+            fansSprite[4].sprite = TouchPointMineSprite;
+            fansSprite[5].sprite = TouchHoldMineSprite[4];
+        }
+        else if (isBreak)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                fansSprite[i].sprite = TouchHoldBreakSprite[i];
+            }
+            fansSprite[4].sprite = TouchPointBreakSprite;
+            fansSprite[5].sprite = TouchHoldBreakSprite[4];
+        }
 
         transform.position = GetAreaPos(startPosition, areaPosition);
 

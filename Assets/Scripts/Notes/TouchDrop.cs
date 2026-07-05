@@ -9,6 +9,8 @@ public class TouchDrop : MonoBehaviour
     public char areaPosition;
     public bool isEach;
     public bool isFirework;
+    public bool isMine;
+    public bool isBreak;
 
     public int startPosition;
 
@@ -20,14 +22,23 @@ public class TouchDrop : MonoBehaviour
 
     public Sprite fanNormalSprite;
     public Sprite fanEachSprite;
+    public Sprite fanBreakSprite;
+    public Sprite fanMineSprite;
+    public Sprite fanMineBreakSprite;
 
     public Sprite pointNormalSprite;
     public Sprite pointEachSprite;
+    public Sprite pointBreakSprite;
+    public Sprite pointMineSprite;
+    public Sprite pointMineBreakSprite;
 
     public Sprite justSprite;
 
     public Sprite[] multTouchNormalSprite = new Sprite[2];
     public Sprite[] multTouchEachSprite = new Sprite[2];
+    public Sprite[] multTouchBreakSprite = new Sprite[2];
+    public Sprite[] multTouchBreakMineSprite = new Sprite[2];
+    public Sprite[] multTouchMineSprite = new Sprite[2];
 
     AudioTimeProvider timeProvider;
     MultTouchHandler multTouchHandler;
@@ -62,7 +73,29 @@ public class TouchDrop : MonoBehaviour
             fansSprite[i] = fans[i].GetComponent<SpriteRenderer>();
         }
 
-        if (isEach) { 
+        if (isMine && isBreak)
+        {
+            SetfanSprite(fanMineBreakSprite);
+            fansSprite[4].sprite = pointMineBreakSprite;
+            fansSprite[5].sprite = multTouchBreakMineSprite[0];
+            fansSprite[6].sprite = multTouchBreakMineSprite[1];
+        }
+        else if (isMine)
+        {
+            SetfanSprite(fanMineSprite);
+            fansSprite[4].sprite = pointMineSprite;
+            fansSprite[5].sprite = multTouchMineSprite[0];
+            fansSprite[6].sprite = multTouchMineSprite[1];
+        }
+        else if (isBreak)
+        {
+            SetfanSprite(fanBreakSprite);
+            fansSprite[4].sprite = pointBreakSprite;
+            fansSprite[5].sprite = multTouchBreakSprite[0];
+            fansSprite[6].sprite = multTouchBreakSprite[1];
+        }
+        else if (isEach)
+        {
             SetfanSprite(fanEachSprite);
             fansSprite[4].sprite = pointEachSprite;
             fansSprite[5].sprite = multTouchEachSprite[0];

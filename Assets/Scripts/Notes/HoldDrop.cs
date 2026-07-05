@@ -12,17 +12,22 @@ public class HoldDrop : MonoBehaviour
     public bool isEach = false;
     public bool isEX = false;
     public bool isBreak = false;
+    public bool isMine = false;
 
     public Sprite tapSpr;
     public Sprite eachSpr;
     public Sprite exSpr;
     public Sprite breakSpr;
+    public Sprite mineSpr;
+    public Sprite mineBreakSpr;
 
     public Sprite eachLine;
     public Sprite breakLine;
+    public Sprite mineLine;
 
     public Sprite holdEachEnd;
     public Sprite holdBreakEnd;
+    public Sprite holdMineEnd;
 
     public RuntimeAnimatorController HoldShine;
     public RuntimeAnimatorController BreakShine;
@@ -89,7 +94,19 @@ public class HoldDrop : MonoBehaviour
                 exSpriteRender.color = exEffectEach;
             }
         }
-        if (isBreak)
+        if(isMine && isBreak)
+        {
+            spriteRenderer.sprite = mineBreakSpr;
+            lineSpriteRender.sprite = mineLine;
+            holdEndRender.sprite = holdMineEnd;
+        }
+        else if (isMine)
+        {
+            spriteRenderer.sprite = mineSpr;
+            lineSpriteRender.sprite = mineLine;
+            holdEndRender.sprite = holdMineEnd;
+        }
+        else if (isBreak)
         {
             spriteRenderer.sprite = breakSpr;
             lineSpriteRender.sprite = breakLine;
@@ -202,6 +219,7 @@ public class HoldDrop : MonoBehaviour
 
     void startHoldShine()
     {
+        if (isMine) return;
         if (!holdAnimStart)
         {
             holdAnimStart = true;

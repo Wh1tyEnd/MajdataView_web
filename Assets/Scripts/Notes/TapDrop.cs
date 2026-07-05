@@ -13,10 +13,13 @@ public class TapDrop : MonoBehaviour
     public bool isBreak = false;
     public bool isEX = false;
     public bool isFakeStarRotate = false;
+    public bool isMine = false;
 
     public Sprite normalSpr;
     public Sprite eachSpr;
     public Sprite breakSpr;
+    public Sprite mineSpr;
+    public Sprite mineBreakSpr;
     public Sprite exSpr;
 
     public Sprite eachLine;
@@ -72,7 +75,22 @@ public class TapDrop : MonoBehaviour
                 exSpriteRender.color = exEffectEach;
             }
         }
-        if (isBreak)
+        if (isMine)
+        {
+            if (isBreak)
+            {
+                spriteRenderer.sprite = mineBreakSpr;
+                Animator anim = gameObject.AddComponent<Animator>();  // break tap闪烁
+                anim.runtimeAnimatorController = BreakShine;
+                anim.enabled = false;
+                animator = anim;
+            }
+            else
+            {
+                spriteRenderer.sprite = mineSpr;
+            }
+        }
+        else if (isBreak)
         {
             spriteRenderer.sprite = breakSpr;
             lineSpriteRender.sprite = breakLine;

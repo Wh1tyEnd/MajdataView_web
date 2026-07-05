@@ -13,9 +13,13 @@ public class WifiDrop : MonoBehaviour
     public Sprite[] normalSlide = new Sprite[11];
     public Sprite[] eachSlide = new Sprite[11];
     public Sprite[] breakSlide = new Sprite[11];
+    public Sprite[] mineSlide = new Sprite[11];
+    public Sprite[] minebreakSlide = new Sprite[11];
     public Sprite normalStar;
     public Sprite eachStar;
     public Sprite breakStar;
+    public Sprite mineStar;
+    public Sprite minebreakStar;
 
     public RuntimeAnimatorController slideShine;
 
@@ -26,6 +30,7 @@ public class WifiDrop : MonoBehaviour
     public float speed;
     public bool isEach;
     public bool isBreak;
+    public bool isMine = false;
     public bool isGroupPart;
     public bool isGroupPartEnd;
 
@@ -53,9 +58,14 @@ public class WifiDrop : MonoBehaviour
         {
             star_slide[i] = Instantiate(star_slidePrefab, notes);
             spriteRenderer_star[i] = star_slide[i].GetComponent<SpriteRenderer>();
+
             if (isEach) spriteRenderer_star[i].sprite = eachStar;
-            else if (isBreak) spriteRenderer_star[i].sprite = breakStar;
             else spriteRenderer_star[i].sprite = normalStar;
+
+            if (isBreak && isMine) spriteRenderer_star[i].sprite = minebreakStar;
+            else if (isBreak) spriteRenderer_star[i].sprite = breakStar;
+            else if (isMine) spriteRenderer_star[i].sprite = mineStar;
+
             star_slide[i].transform.rotation = Quaternion.Euler(0, 0, -22.5f + (-45f * (i + 3 + startPosition)));
             SlidePositionEnd[i] = getPositionFromDistance(4.8f, i + 3 + startPosition);
             star_slide[i].SetActive(false);
@@ -85,21 +95,35 @@ public class WifiDrop : MonoBehaviour
         {
             var sr = slideBars[i].GetComponent<SpriteRenderer>();
 
-            if (isBreak)
-            {
-                sr.sprite = breakSlide[i];
-                Animator anim = slideBars[i].AddComponent<Animator>();
-                anim.runtimeAnimatorController = slideShine;
-                anim.enabled = false;
-                animators.Add(anim);
-            }
-            else if (isEach)
+            
+            if (isEach)
             {
                 sr.sprite = eachSlide[i];
             }
             else
             {
                 sr.sprite = normalSlide[i];
+            }
+
+            if (isBreak)
+            {
+                Animator anim = slideBars[i].AddComponent<Animator>();
+                anim.runtimeAnimatorController = slideShine;
+                anim.enabled = false;
+                animators.Add(anim);
+            }
+
+            if (isMine && isBreak)
+            {
+                sr.sprite = minebreakSlide[i];
+            }
+            else if (isMine)
+            {
+                sr.sprite = mineSlide[i];
+            }
+            else if (isBreak)
+            {
+                sr.sprite = breakSlide[i];
             }
 
             sbRender.Add(sr);

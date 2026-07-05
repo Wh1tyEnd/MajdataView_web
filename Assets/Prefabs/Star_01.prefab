@@ -25,13 +25,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3599915660479470153}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4554767367093168497}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3599915660479470151
 SpriteRenderer:
@@ -106,16 +107,23 @@ MonoBehaviour:
   isDouble: 0
   isEX: 0
   isNoHead: 0
+  isMine: 0
   tapSpr: {fileID: 21300000, guid: d93311961dcd0144f8f4b693b2669329, type: 3}
   eachSpr: {fileID: 21300000, guid: 18b858f24d67a4341ab427db18c00991, type: 3}
   breakSpr: {fileID: 21300000, guid: 9d2a44de9d0bfbc4a91d7b283d66de2d, type: 3}
   exSpr: {fileID: 0}
+  mineSpr: {fileID: 0}
+  mineBreakSpr: {fileID: 0}
   tapSpr_Double: {fileID: 21300000, guid: e7a7825089474f44a9a80e947ae13f52, type: 3}
   eachSpr_Double: {fileID: 21300000, guid: c3161b593a9dd184a803ff86429d5db8, type: 3}
   breakSpr_Double: {fileID: 21300000, guid: 297fa0010cb0b034b9ceaf1e1da9fc9a, type: 3}
   exSpr_Double: {fileID: 0}
+  mineSpr_Double: {fileID: 0}
+  mineBreakSpr_Double: {fileID: 0}
   eachLine: {fileID: 21300000, guid: 1a40750ad0e4fb747aeeb83536f52d09, type: 3}
   breakLine: {fileID: 21300000, guid: c190fb744a4bc94429a7cbce66f9fa9b, type: 3}
+  mineLine: {fileID: 21300000, guid: 64de9521b69a75848b0964fe51065236, type: 3}
+  BreakShine: {fileID: 0}
   slide: {fileID: 0}
   tapLine: {fileID: 7599635926637845735, guid: 170f7f7a95689ea479fc7270d6ebf074, type: 3}
   exEffectTap: {r: 0.6745098, g: 0.98440695, b: 1, a: 1}
@@ -145,12 +153,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5847727196508993278}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3599915660479470150}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3281440940452495023
 SpriteRenderer:
