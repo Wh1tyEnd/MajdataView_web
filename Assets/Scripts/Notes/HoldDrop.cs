@@ -146,7 +146,7 @@ public class HoldDrop : MonoBehaviour
         var holdTime = timing - lastFor;
         var holdDistance = holdTime * speed + 4.8f;
         if (holdTime > 0) {
-            GameObject.Find("NoteEffects").GetComponent<NoteEffectManager>().PlayEffect(startPosition, isBreak);
+            GameObject.Find("NoteEffects").GetComponent<NoteEffectManager>().PlayEffect(startPosition, isBreak, isMine);
             if (isBreak)
             {
                 GameObject.Find("ObjectCounter").GetComponent<ObjectCounter>().breakCount++;

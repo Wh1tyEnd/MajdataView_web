@@ -115,7 +115,7 @@ public class SimaiDataLoader : MonoBehaviour
 
                         NDCompo.BreakShine = BreakShine;
 
-                        if (timing.noteList.Count(o => !o.isMine) > 1) NDCompo.isEach = true;
+                        if (timing.noteList.Count(o => !o.isMine && !o.isSlideNoHead) > 1) NDCompo.isEach = true;
                         NDCompo.isBreak = note.isBreak;
                         NDCompo.isMine = note.isMine;
                         NDCompo.isEX = note.isEx;
@@ -138,7 +138,7 @@ public class SimaiDataLoader : MonoBehaviour
                         NDCompo.HoldShine = HoldShine;
                         NDCompo.BreakShine = BreakShine;
 
-                        if (timing.noteList.Count(o => !o.isMine) > 1) NDCompo.isEach = true;
+                        if (timing.noteList.Count(o => !o.isMine && !o.isSlideNoHead) > 1) NDCompo.isEach = true;
                         NDCompo.time = (float)timing.time;
                         NDCompo.lastFor = (float)note.holdTime;
                         NDCompo.startPosition = note.startPosition;
@@ -167,7 +167,7 @@ public class SimaiDataLoader : MonoBehaviour
                         NDCompo.TouchPointMineSprite = customSkin.TouchPoint_Mine;
                         NDCompo.TouchPointBreakMineSprite = customSkin.TouchPoint_Break_Mine;
 
-                        if (timing.noteList.Count(o => !o.isMine) > 1) NDCompo.isEach = true;
+                        if (timing.noteList.Count(o => !o.isMine && !o.isSlideNoHead) > 1) NDCompo.isEach = true;
 
                         Array.Copy(customSkin.TouchHold, NDCompo.TouchHoldSprite, 5);
                         Array.Copy(customSkin.TouchHold_Break, NDCompo.TouchHoldBreakSprite, 5);
@@ -206,7 +206,7 @@ public class SimaiDataLoader : MonoBehaviour
                         NDCompo.isMine = note.isMine;
                         NDCompo.isBreak = note.isBreak;
 
-                        if (timing.noteList.Count(o => !o.isMine) > 1) NDCompo.isEach = true;
+                        if (timing.noteList.Count(o => !o.isMine && !o.isSlideNoHead) > 1) NDCompo.isEach = true;
                         NDCompo.speed = touchSpeed * timing.HSpeed;
                         NDCompo.isFirework = note.isHanabi;
                     }
@@ -215,7 +215,7 @@ public class SimaiDataLoader : MonoBehaviour
                         InstantiateStarGroup(timing, note, i, lastNoteTime);    // 星星组
                     }
                 }
-                var eachNotes = timing.noteList.FindAll(o => o.noteType != SimaiNoteType.Touch && o.noteType != SimaiNoteType.TouchHold && !o.isMine);
+                var eachNotes = timing.noteList.FindAll(o => o.noteType != SimaiNoteType.Touch && o.noteType != SimaiNoteType.TouchHold && !o.isMine && !o.isSlideNoHead);
                 if (eachNotes.Count > 1)//有多个非touchnote
                 {
                     int startPos = eachNotes[0].startPosition;
@@ -590,19 +590,18 @@ public class SimaiDataLoader : MonoBehaviour
         //TODO get this swapped
         Array.Copy(customSkin.Wifi_Mine, WifiCompo.minebreakSlide, 11);
 
-        if (timing.noteList.Count(o => !o.isMine) > 1)
+        if (timing.noteList.Count(o => !o.isMine && !o.isSlideNoHead) > 1)
         {
             NDCompo.isEach = true;
             NDCompo.isDouble = false;
             if (timing.noteList.FindAll(
-                o => o.noteType == SimaiNoteType.Slide && !o.isMine).Count
+                o => o.noteType == SimaiNoteType.Slide && !o.isMine && !o.isSlideNoHead).Count
                 > 1)
             {
                 WifiCompo.isEach = true;
             }
             var count = timing.noteList.FindAll(
-            o => o.noteType == SimaiNoteType.Slide &&
-            o.startPosition == note.startPosition).Count;
+            o => o.noteType == SimaiNoteType.Slide && o.startPosition == note.startPosition).Count;
             if (count > 1)//有同起点
             {
                 NDCompo.isDouble = true;
@@ -679,19 +678,18 @@ public class SimaiDataLoader : MonoBehaviour
         SliCompo.spriteMineBreak = customSkin.Slide_Break_Mine;
         SliCompo.slideShine = BreakShine;
 
-        if (timing.noteList.Count(o => !o.isMine) > 1)
+        if (timing.noteList.Count(o => !o.isMine && !o.isSlideNoHead) > 1)
         {
             NDCompo.isEach = true;
             if (timing.noteList.FindAll(
-                o => o.noteType == SimaiNoteType.Slide && !o.isMine).Count
+                o => o.noteType == SimaiNoteType.Slide && !o.isMine && !o.isSlideNoHead).Count
                 > 1)
             {
                 SliCompo.isEach = true;
                 slide_star.GetComponent<SpriteRenderer>().sprite = customSkin.Star_Each;
             }
             var count = timing.noteList.FindAll(
-                o => o.noteType == SimaiNoteType.Slide &&
-                o.startPosition == note.startPosition).Count;
+                o => o.noteType == SimaiNoteType.Slide && o.startPosition == note.startPosition).Count;
             if (count > 1)
             {
                 NDCompo.isDouble = true;

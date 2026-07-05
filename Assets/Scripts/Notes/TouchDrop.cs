@@ -128,7 +128,8 @@ public class TouchDrop : MonoBehaviour
         if (timing > 0.05f)
         {
             multTouchHandler.cancelTouch(this);
-            Instantiate(tapEffect, transform.position, transform.rotation);
+            if(!isMine)
+                Instantiate(tapEffect, transform.position, transform.rotation);
             GameObject.Find("ObjectCounter").GetComponent<ObjectCounter>().touchCount++;
             if (isFirework) {
                 fireworkEffect.SetTrigger("Fire");

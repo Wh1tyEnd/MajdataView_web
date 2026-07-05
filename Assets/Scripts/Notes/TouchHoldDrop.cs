@@ -130,7 +130,8 @@ public class TouchHoldDrop : MonoBehaviour
 
         if (timing > lastFor)
         {
-            Instantiate(tapEffect, transform.position, transform.rotation);
+            if(!isMine)
+                Instantiate(tapEffect, transform.position, transform.rotation);
             GameObject.Find("ObjectCounter").GetComponent<ObjectCounter>().holdCount++;
             if (isFirework)
             {

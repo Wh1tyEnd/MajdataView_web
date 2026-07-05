@@ -49,8 +49,9 @@ public class NoteEffectManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    public void PlayEffect(int position,bool isBreak)
+    public void PlayEffect(int position,bool isBreak, bool isMine)
     {
+        if (isMine) return;
         var pos = position - 1;
         tapEffects[pos].SetActive(true);
         if (isBreak)

@@ -136,6 +136,10 @@ public class SoundEffect: MonoBehaviour
                 {
                     case SimaiNoteType.Tap:
                         {
+                            if (note.isMine)
+                            {
+                                continue;
+                            }
                             stobj.hasAnswer = true;
                             if (note.isBreak)
                             {
@@ -157,6 +161,10 @@ public class SoundEffect: MonoBehaviour
                         }
                     case SimaiNoteType.Hold:
                         {
+                            if (note.isMine)
+                            {
+                                continue;
+                            }
                             stobj.hasAnswer = true;
                             // 类似于Tap 判断Break和Ex的音效 二者皆无则为普通
                             if (note.isBreak)
@@ -200,8 +208,16 @@ public class SoundEffect: MonoBehaviour
                         {
                             if (!note.isSlideNoHead)
                             {
+                                if (note.isMine)
+                                {
+                                    stobj.hasAnswer = false;
+                                }
+                                else
+                                {
+                                    stobj.hasAnswer = true;
+                                }
                                 // 当Slide不是无头星星的时候 才有answer音和判定音
-                                stobj.hasAnswer = true;
+
                                 if (note.isBreak)
                                 {
                                     stobj.hasBreak = true;
@@ -216,7 +232,7 @@ public class SoundEffect: MonoBehaviour
                                     stobj.hasJudge = true;
                                 }
                             }
-
+                            if (note.isSlideMine) continue;
                             // Slide启动音效
                             var targetTime = note.slideStartTime;
                             var nearIndex = waitToBePlayed.FindIndex(o => Math.Abs(o.time - targetTime) < 0.001f);
@@ -248,6 +264,10 @@ public class SoundEffect: MonoBehaviour
                         }
                     case SimaiNoteType.Touch:
                         {
+                            if (note.isMine)
+                            {
+                                continue;
+                            }
                             stobj.hasAnswer = true;
                             stobj.hasTouch = true;
                             if (note.isHanabi)
@@ -258,6 +278,10 @@ public class SoundEffect: MonoBehaviour
                         }
                     case SimaiNoteType.TouchHold:
                         {
+                            if (note.isMine)
+                            {
+                                continue;
+                            }
                             stobj.hasAnswer = true;
                             stobj.hasTouch = true;
                             stobj.hasTouchHold = true;

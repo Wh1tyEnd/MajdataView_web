@@ -40,15 +40,14 @@ public class HandleJSMessages : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         Application.targetFrameRate = -1;
-        var apiroot = "https://majdata.net/api3/api/maichart/";
-        var id = "f30fd482-b2e1-418d-a94e-d174d4e00e6f";
+        var apiroot = "file://C:/Users/bbben/Downloads/You are the miserable/";
         gameMainManager = GameObject.Find("GameMain").GetComponent<GameMainManager>();
 
-        gameMainManager.WebLoad("file://D:/_Game/maimai∆◊/»À≈º∞Ÿ∫œ/maidata.txt",
-            apiroot + id +  "/image?fullImage=true",
-            apiroot + id + "/Track",
-            apiroot + id + "/Video",
-            0);
+        gameMainManager.WebLoad(apiroot+ "maidata.txt",
+            apiroot +  "bg.jpg",
+            apiroot + "track.mp3",
+            apiroot + "bg.mp4",
+            6);
     }
 #endif
 
