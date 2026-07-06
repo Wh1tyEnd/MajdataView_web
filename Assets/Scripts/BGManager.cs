@@ -30,7 +30,7 @@ public class BGManager : MonoBehaviour
 
     private void VideoPlayer_errorReceived(VideoPlayer source, string message)
     {
-        Debug.Log("LoadVideoFailed");
+        Debug.LogWarning("[MJV][BGManager] LoadVideoFailed: " + message);
         UseStaticBackground("VideoPlayer.errorReceived");
     }
 
@@ -43,6 +43,8 @@ public class BGManager : MonoBehaviour
         {
             spriteRender.forceRenderingOff = false;
         }
+
+        Debug.LogWarning("[MJV][BGManager] use static background reason=" + reason);
     }
 
     public void SetNewSpriteForVideo()
@@ -54,6 +56,17 @@ public class BGManager : MonoBehaviour
     public void SetIdleVideoFrameVisible(bool visible, string reason)
     {
         showIdleVideoFrame = visible && !isAnyErr;
+
+        Debug.Log(
+            "[MJV][BGManager] SetIdleVideoFrameVisible visible=" +
+            showIdleVideoFrame +
+            " requested=" +
+            visible +
+            " reason=" +
+            reason +
+            " isAnyErr=" +
+            isAnyErr
+        );
     }
 
     public void UpdateVideoRatio()
@@ -63,6 +76,7 @@ public class BGManager : MonoBehaviour
             videoPlayer.width <= 0 ||
             videoPlayer.height <= 0)
         {
+            Debug.LogWarning("[MJV][BGManager] UpdateVideoRatio skipped: invalid video size");
             return;
         }
 
@@ -87,6 +101,17 @@ public class BGManager : MonoBehaviour
         if (hideStaticBackground != lastHideStaticBackground)
         {
             lastHideStaticBackground = hideStaticBackground;
+
+            Debug.Log(
+                "[MJV][BGManager] staticBackgroundHidden=" +
+                hideStaticBackground +
+                " videoPlaying=" +
+                (videoPlayer != null && videoPlayer.isPlaying) +
+                " videoPrepared=" +
+                (videoPlayer != null && videoPlayer.isPrepared) +
+                " idleFrame=" +
+                showIdleVideoFrame
+            );
         }
 
         if (BackgroundCover != null && settings != null)
