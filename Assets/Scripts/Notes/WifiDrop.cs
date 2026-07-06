@@ -203,7 +203,8 @@ public class WifiDrop : MonoBehaviour
                     {
                         GameObject.Find("ObjectCounter").GetComponent<ObjectCounter>().slideCount++;
                     }
-                    slideOK.SetActive(true);
+                    if (!isMine)
+                        slideOK.SetActive(true);
                 }
                 for (int i = 0; i < star_slide.Length; i++)
                     Destroy(star_slide[i]);
