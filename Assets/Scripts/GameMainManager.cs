@@ -157,8 +157,9 @@ public class GameMainManager : MonoBehaviour
             videoPlayer.time = 0d;
             bgManager.SetIdleVideoFrameVisible(true, reason + ":ResetToFirstFrame");
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Debug.LogError("[MJV][Stop] SafeStopVideoPlayer exception: " + e);
         }
     }
 
@@ -270,6 +271,7 @@ public class GameMainManager : MonoBehaviour
             yield return new WaitForEndOfFrame();
             if (Time.time - prepareStartTime > 2f)
             {
+                Debug.LogWarning("[MJV][Video] prepare timeout");
                 bgManager.UseStaticBackground("PrepareTimeout");
                 callback.Invoke();
                 StartCoroutine(SeeIfitisDoneLater());
@@ -294,8 +296,9 @@ public class GameMainManager : MonoBehaviour
             bgManager.videoPlayer.time = 0d;
             bgManager.videoPlayer.Play();
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Debug.LogError("[MJV][FirstFrame] Play exception: " + e);
             yield break;
         }
 
@@ -308,8 +311,9 @@ public class GameMainManager : MonoBehaviour
             bgManager.videoPlayer.time = 0d;
             bgManager.SetIdleVideoFrameVisible(true, "ShowPreparedVideoFirstFrame");
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Debug.LogError("[MJV][FirstFrame] Pause/reset exception: " + e);
         }
     }
 
@@ -317,9 +321,11 @@ public class GameMainManager : MonoBehaviour
     {
         while (!bgManager.videoPlayer.isPrepared)
         {
+           //Debug.Log("[MJV][FirstFrame] Still waiting for prepare");
             yield return new WaitForEndOfFrame();
         }
         bgManager.UpdateVideoRatio();
+        bgManager.isAnyErr = false;
         yield return StartCoroutine(ShowPreparedVideoFirstFrame());
     }
 
@@ -369,9 +375,10 @@ public class GameMainManager : MonoBehaviour
             bgManager.SetIdleVideoFrameVisible(true, reason + ":SeekStart");
             player.time = videoTime;
         }
-        catch (Exception)
+        catch (Exception e)
         {
             player.seekCompleted -= OnSeekCompleted;
+            Debug.LogError("[MJV][VideoSeek] request exception reason=" + reason + " error=" + e);
             yield break;
         }
 
@@ -478,10 +485,7 @@ public class GameMainManager : MonoBehaviour
 
         if (bgManager != null && bgManager.videoPlayer != null && bgManager.videoPlayer.isPrepared)
         {
-            if (bgManager.videoPlayer.canSetPlaybackSpeed)
-            {
-                bgManager.videoPlayer.playbackSpeed = audioSpeed;
-            }
+            bgManager.SetPlayBackSpeed(audioSpeed);
 
             if (wasPlaying)
             {

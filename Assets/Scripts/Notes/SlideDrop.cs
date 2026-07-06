@@ -184,7 +184,8 @@ public class SlideDrop : MonoBehaviour
                     {
                         GameObject.Find("ObjectCounter").GetComponent<ObjectCounter>().slideCount++;
                     }
-                    slideOK.SetActive(true);
+                    if(!isMine)
+                        slideOK.SetActive(true);
                 }
                 else
                 {

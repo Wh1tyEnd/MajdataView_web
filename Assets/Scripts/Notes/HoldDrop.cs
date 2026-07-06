@@ -184,8 +184,11 @@ public class HoldDrop : MonoBehaviour
             {
                 holdDistance = 1.225f;
                 distance = 4.8f;
-                holdEffect.SetActive(true);
-                startHoldShine();
+                if (!isMine)
+                {
+                    holdEffect.SetActive(true);
+                    startHoldShine();
+                }
             }
             else if (holdDistance < 1.225f && distance < 4.8f) // 头未到达 尾未出现
             {
@@ -194,8 +197,11 @@ public class HoldDrop : MonoBehaviour
             else if (holdDistance >= 1.225f && distance >= 4.8f) // 头到达 尾出现
             {
                 distance = 4.8f;
-                holdEffect.SetActive(true);
-                startHoldShine();
+                if (!isMine)
+                {
+                    holdEffect.SetActive(true);
+                    startHoldShine();
+                }
 
                 holdEndRender.enabled = true;
             }
