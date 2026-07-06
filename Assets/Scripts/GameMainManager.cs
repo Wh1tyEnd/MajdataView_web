@@ -321,9 +321,11 @@ public class GameMainManager : MonoBehaviour
     {
         while (!bgManager.videoPlayer.isPrepared)
         {
+           //Debug.Log("[MJV][FirstFrame] Still waiting for prepare");
             yield return new WaitForEndOfFrame();
         }
         bgManager.UpdateVideoRatio();
+        bgManager.isAnyErr = false;
         yield return StartCoroutine(ShowPreparedVideoFirstFrame());
     }
 
@@ -483,10 +485,7 @@ public class GameMainManager : MonoBehaviour
 
         if (bgManager != null && bgManager.videoPlayer != null && bgManager.videoPlayer.isPrepared)
         {
-            if (bgManager.videoPlayer.canSetPlaybackSpeed)
-            {
-                bgManager.videoPlayer.playbackSpeed = audioSpeed;
-            }
+            bgManager.SetPlayBackSpeed(audioSpeed);
 
             if (wasPlaying)
             {

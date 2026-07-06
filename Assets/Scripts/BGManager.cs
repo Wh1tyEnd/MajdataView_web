@@ -7,6 +7,7 @@ using UnityEngine.Video;
 using System.IO;
 using System.Drawing;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class BGManager : MonoBehaviour
 {
@@ -14,8 +15,10 @@ public class BGManager : MonoBehaviour
     SpriteRenderer BackgroundCover;
     public SettingsManager settings;
     public VideoPlayer videoPlayer;
+    public AudioTimeProvider audioTimeProvider;
     public GameObject videoTarget;
     public bool isAnyErr = false;
+    float desireSpeed = 1f;
 
     private bool showIdleVideoFrame = false;
     private bool lastHideStaticBackground = false;
@@ -24,6 +27,7 @@ public class BGManager : MonoBehaviour
     {
         spriteRender = GetComponent<SpriteRenderer>();
         BackgroundCover = GameObject.Find("BackgroundCover").GetComponent<SpriteRenderer>();
+        audioTimeProvider = GameObject.Find("AudioTimeProvider").GetComponent<AudioTimeProvider>();
         videoPlayer.errorReceived += VideoPlayer_errorReceived;
         SetNewSpriteForVideo();
     }
@@ -79,9 +83,22 @@ public class BGManager : MonoBehaviour
             Debug.LogWarning("[MJV][BGManager] UpdateVideoRatio skipped: invalid video size");
             return;
         }
-
+        Debug.LogWarning("[MJV][BGManager] UpdateVideoRatio");
         var scale = videoPlayer.height / (float)videoPlayer.width;
         videoTarget.transform.localScale = new Vector3(2.25f, 2.25f * scale);
+    }
+
+    public void SetPlayBackSpeed(float speed)
+    {
+        desireSpeed = speed;
+        if (videoPlayer.canSetPlaybackSpeed)
+        {
+            videoPlayer.playbackSpeed = desireSpeed;
+        }
+        else
+        {
+            Debug.Log("[MJV][BGManager] videoPlayer.canSetPlaybackSpeed is false");
+        }
     }
 
     public void Update()
@@ -117,6 +134,32 @@ public class BGManager : MonoBehaviour
         if (BackgroundCover != null && settings != null)
         {
             BackgroundCover.color = new UnityEngine.Color(0f, 0f, 0f, settings.bgCover);
+        }
+
+        if (videoPlayer.isPrepared && videoPlayer.isPlaying)
+        {
+            var delta = videoPlayer.time - audioTimeProvider.AudioTime;
+            //Debug.Log("[MJV][BGManager] video time delta:" + delta);
+            if (Math.Abs(delta) > 0.1f)
+            {
+                Debug.Log("[MJV][BGManager] video time is behind audio time, try speed up video");
+                if (videoPlayer.canSetPlaybackSpeed)
+                {
+                    float speedchange = 1f + ((float)-delta * 0.8f);
+                    videoPlayer.playbackSpeed = desireSpeed * speedchange;
+                }
+                else
+                {
+                    Debug.Log("[MJV][BGManager] videoPlayer.canSetPlaybackSpeed is false");
+                }
+            }
+            else
+            {
+                if (videoPlayer.canSetPlaybackSpeed)
+                {
+                    videoPlayer.playbackSpeed = desireSpeed;
+                }
+            }
         }
     }
 }
