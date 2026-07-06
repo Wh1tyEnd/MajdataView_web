@@ -40,7 +40,7 @@ public class HandleJSMessages : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         Application.targetFrameRate = -1;
-        var apiroot = "file://C:/Users/bbben/Downloads/You are the miserable/";
+        var apiroot = "file://C:/Users/bengy/Downloads/test1/";
         gameMainManager = GameObject.Find("GameMain").GetComponent<GameMainManager>();
 
         gameMainManager.WebLoad(apiroot+ "maidata.txt",

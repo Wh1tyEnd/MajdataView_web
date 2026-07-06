@@ -590,12 +590,12 @@ public class SimaiDataLoader : MonoBehaviour
         //TODO get this swapped
         Array.Copy(customSkin.Wifi_Mine, WifiCompo.minebreakSlide, 11);
 
-        if (timing.noteList.Count(o => !o.isMine && !o.isSlideNoHead) > 1)
+        if (timing.noteList.Count > 1)
         {
             NDCompo.isEach = true;
             NDCompo.isDouble = false;
             if (timing.noteList.FindAll(
-                o => o.noteType == SimaiNoteType.Slide && !o.isMine && !o.isSlideNoHead).Count
+                o => o.noteType == SimaiNoteType.Slide && !o.isSlideMine).Count
                 > 1)
             {
                 WifiCompo.isEach = true;
@@ -678,11 +678,11 @@ public class SimaiDataLoader : MonoBehaviour
         SliCompo.spriteMineBreak = customSkin.Slide_Break_Mine;
         SliCompo.slideShine = BreakShine;
 
-        if (timing.noteList.Count(o => !o.isMine && !o.isSlideNoHead) > 1)
+        if (timing.noteList.Count > 1)
         {
             NDCompo.isEach = true;
             if (timing.noteList.FindAll(
-                o => o.noteType == SimaiNoteType.Slide && !o.isMine && !o.isSlideNoHead).Count
+                o => o.noteType == SimaiNoteType.Slide && !o.isSlideMine).Count
                 > 1)
             {
                 SliCompo.isEach = true;
