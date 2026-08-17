@@ -82,28 +82,35 @@ public class SoundEffect: MonoBehaviour
     {
         if (path == string.Empty) {Debug.LogError("Empty path!"); yield break;}
         Debug.Log("Downloading audio from " + path);
-        UnityWebRequest trackreq = UnityWebRequest.Get(path);
-        trackreq.downloadHandler = new DownloadHandlerAudioClip(path,AudioType.MPEG);
-        trackreq.SendWebRequest();
-        while (!trackreq.isDone) {
-            callback.Invoke(trackreq.downloadProgress);
-            yield return new WaitForSecondsRealtime(0.1f);
-        }
-        if (trackreq.result != UnityWebRequest.Result.Success)
+        if (bgmStream.clip != null)
         {
-            Debug.LogError("Error downloading audio: " + trackreq.error);
+            Destroy(bgmStream.clip);
+            bgmStream.clip = null;
         }
-        else
+        using (UnityWebRequest trackreq = UnityWebRequest.Get(path))
         {
-            var clip = DownloadHandlerAudioClip.GetContent(trackreq);
-            if (clip != null)
-            {
-                bgmStream.clip = clip;
-                bgmStream.clip.LoadAudioData();
-                if (successcallback != null)
-                    successcallback.Invoke();
+            trackreq.downloadHandler = new DownloadHandlerAudioClip(path,AudioType.MPEG);
+            trackreq.SendWebRequest();
+            while (!trackreq.isDone) {
+                callback.Invoke(trackreq.downloadProgress);
+                yield return new WaitForSecondsRealtime(0.1f);
             }
-            else { Debug.LogError("AudioClip is null!"); }
+            if (trackreq.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Error downloading audio: " + trackreq.error);
+            }
+            else
+            {
+                var clip = DownloadHandlerAudioClip.GetContent(trackreq);
+                if (clip != null)
+                {
+                    bgmStream.clip = clip;
+                    bgmStream.clip.LoadAudioData();
+                    if (successcallback != null)
+                        successcallback.Invoke();
+                }
+                else { Debug.LogError("AudioClip is null!"); }
+            }
         }
         
     }

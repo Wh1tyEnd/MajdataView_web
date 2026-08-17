@@ -44,20 +44,22 @@ public class SimaiDataLoader : MonoBehaviour
         if (path == string.Empty) {Debug.LogError("Empty path!"); yield break;}
         Debug.Log("Downloading maidata from " + path);
         SimaiProcess.ClearData();
-        UnityWebRequest www = UnityWebRequest.Get(path);
-        yield return www.SendWebRequest();
- 
-        if (www.result != UnityWebRequest.Result.Success) {
-            Debug.LogError("Error downloading data: " + www.error);
-        }
-        else
+        using (UnityWebRequest www = UnityWebRequest.Get(path))
         {
-            if (!SimaiProcess.ReadDataRaw(www.downloadHandler.text.Split('\n')))
-            {
-                Debug.LogError("Error Loading Chart.");
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success) {
+                Debug.LogError("Error downloading data: " + www.error);
             }
-            else {
-                callback.Invoke();
+            else
+            {
+                if (!SimaiProcess.ReadDataRaw(www.downloadHandler.text.Split('\n')))
+                {
+                    Debug.LogError("Error Loading Chart.");
+                }
+                else {
+                    callback.Invoke();
+                }
             }
         }
     }

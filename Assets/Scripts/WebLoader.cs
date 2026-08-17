@@ -15,28 +15,36 @@ namespace API
         public static IEnumerator LoadBGFromWeb(string path, Action callback)
         {
             if (path == string.Empty) { Debug.LogError("empty bg path!"); yield break; }
-            UnityWebRequest bgreq = UnityWebRequest.Get(path);
-            bgreq.downloadHandler = new DownloadHandlerTexture();
-            yield return bgreq.SendWebRequest();
-            if (bgreq.result != UnityWebRequest.Result.Success)
+            if (BGManager.spriteRender != null && BGManager.spriteRender.sprite != null)
             {
-                Debug.LogError("Error downloading bg: " + bgreq.error + bgreq.downloadHandler.error);
-                callback.Invoke();
+                var oldTex = BGManager.spriteRender.sprite.texture;
+                UnityEngine.Object.Destroy(BGManager.spriteRender.sprite);
+                if (oldTex != null) UnityEngine.Object.Destroy(oldTex);
+                BGManager.spriteRender.sprite = null;
             }
-            else
+            using (UnityWebRequest bgreq = UnityWebRequest.Get(path))
             {
-                var texture = DownloadHandlerTexture.GetContent(bgreq);
-                var sprite = Sprite.Create(
-                    texture,
-                    new Rect(0.0f, 0.0f, texture.width, texture.height),
-                    new Vector2(0.5f, 0.5f));
+                bgreq.downloadHandler = new DownloadHandlerTexture();
+                yield return bgreq.SendWebRequest();
+                if (bgreq.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.LogError("Error downloading bg: " + bgreq.error + bgreq.downloadHandler.error);
+                    callback.Invoke();
+                }
+                else
+                {
+                    var texture = DownloadHandlerTexture.GetContent(bgreq);
+                    var sprite = Sprite.Create(
+                        texture,
+                        new Rect(0.0f, 0.0f, texture.width, texture.height),
+                        new Vector2(0.5f, 0.5f));
 
-                BGManager.spriteRender.sprite = sprite;
-                var scale = 1080f / (float)sprite.texture.width;
-                BGManager.spriteRender.transform.localScale = new Vector3(scale, scale, scale);
-                callback.Invoke();
+                    BGManager.spriteRender.sprite = sprite;
+                    var scale = 1080f / (float)sprite.texture.width;
+                    BGManager.spriteRender.transform.localScale = new Vector3(scale, scale, scale);
+                    callback.Invoke();
+                }
             }
-
         }
 
     }
