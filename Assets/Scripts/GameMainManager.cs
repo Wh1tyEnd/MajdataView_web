@@ -176,6 +176,8 @@ public class GameMainManager : MonoBehaviour
         var hasVideo = !string.IsNullOrWhiteSpace(videopath);
         if (hasVideo)
         {
+            bgManager.videoPlayer.Stop();
+            bgManager.SetNewSpriteForVideo();
             bgManager.videoPlayer.url = videopath;
         }
         else

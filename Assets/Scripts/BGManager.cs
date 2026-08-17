@@ -53,8 +53,13 @@ public class BGManager : MonoBehaviour
 
     public void SetNewSpriteForVideo()
     {
-        videoTarget.GetComponent<SpriteRenderer>().sprite =
-                Sprite.Create(new Texture2D(480, 480), new Rect(0, 0, 480, 480), new Vector2(0.5f, 0.5f));
+        var sr = videoTarget.GetComponent<SpriteRenderer>();
+        if (sr.sprite != null)
+        {
+            Destroy(sr.sprite.texture);
+            Destroy(sr.sprite);
+        }
+        sr.sprite = Sprite.Create(new Texture2D(480, 480), new Rect(0, 0, 480, 480), new Vector2(0.5f, 0.5f));
     }
 
     public void SetIdleVideoFrameVisible(bool visible, string reason)
